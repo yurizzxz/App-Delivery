@@ -10,13 +10,14 @@ import {
 import Button from "../_components/Button";
 import Constants from "expo-constants";
 import Header from "../_components/Header";
+import { useRouter } from "expo-router";
 
 const statusBarHeight: number = Constants.statusBarHeight;
+
 export default function Profile() {
+  const router = useRouter();
   return (
-    <View
-      style={[styles.container, { marginTop: statusBarHeight}]}
-    >
+    <View style={[styles.container, { marginTop: statusBarHeight }]}>
       <Header title="Perfil" />
       <View style={styles.profileContainer}>
         <View style={styles.avatar} />
@@ -43,14 +44,14 @@ export default function Profile() {
         </Text>
       </View>
       <View>
-        <TouchableOpacity style={styles.optionButton}>
+        <TouchableOpacity onPress={() => router.push("../profileOptions/pedidos")} style={styles.optionButton}>
           <Text style={styles.optionText}>Histórico de pedidos</Text>
         </TouchableOpacity>
         <View style={styles.favoritesContainer}>
-          <TouchableOpacity style={styles.favoriteButton}>
+          <TouchableOpacity onPress={() => router.push("../profileOptions/pizzasfav")} style={styles.favoriteButton}>
             <Text style={styles.favoriteText}>Pizzas Favoritas</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.favoriteButton}>
+          <TouchableOpacity onPress={() => router.push("../profileOptions/lanchesfav")} style={styles.favoriteButton}>
             <Text style={styles.favoriteText}>Lanches Favoritos</Text>
           </TouchableOpacity>
         </View>
@@ -125,7 +126,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     marginBottom: 20,
-    gap: 10
+    gap: 10,
   },
   favoriteButton: {
     flex: 1,

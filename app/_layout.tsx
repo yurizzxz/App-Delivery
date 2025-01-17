@@ -10,6 +10,7 @@ export default function RootLayout() {
         <Stack.Screen name="(tabs)" />
 
         <Stack.Screen name="foods" />
+        <Stack.Screen name="profileOptions" />
 
         <Stack.Screen name="+not-found" />
       </Stack>
