@@ -1,34 +1,173 @@
-import { Image, StyleSheet, View, Text, ScrollView } from 'react-native';
-import Constants from 'expo-constants';
+import {
+  Image,
+  StyleSheet,
+  View,
+  Text,
+  ScrollView,
+  Pressable,
+} from "react-native";
+import Constants from "expo-constants";
+import Header from "../_components/Header";
+import Card from "../_components/Card";
+import SearchInput from "../_components/Search";
+import { useRouter } from 'expo-router';
 
 const statusBarHeight = Constants.statusBarHeight;
 
+const categories = [
+  {
+    name: "Lanches",
+    imageSrc: "https://via.placeholder.com/100x100",
+    route: '/categories/lanches'
+  },
+  {
+    name: "Pizzas",
+    imageSrc: "https://via.placeholder.com/100x100",
+    route: '/categories/pizzas'
+  },
+  {
+    name: "Bebidas",
+    imageSrc: "https://via.placeholder.com/100x100",
+    route: '/categories/bebidas'
+  },
+];
+
 export default function HomeScreen() {
+  const router = useRouter();
+
   return (
-    <ScrollView contentContainerStyle={[styles.container, { marginTop: statusBarHeight, paddingTop: 10}]}>
-      <Image
-        source={require('@/assets/images/partial-react-logo.png')}
-        style={styles.reactLogo}
+    <ScrollView
+      contentContainerStyle={[
+        styles.container,
+        { marginTop: statusBarHeight, paddingTop: 20 },
+      ]}
+    >
+      <Header
+        title="usuário"
+        onProfilePress={() => {}}
+        profileImageUri={null}
       />
-      <Text style={styles.title}>Welcome to Home!</Text>
+
+      {/* Search */}
+      <SearchInput placeholder="O que você procura?" onChangeText={() => {}} />
+
+      <View style={styles.categoryContainer}>
+        <View style={styles.categoryItems}>
+          {categories.map((category, index) => (
+            <Pressable key={index} style={styles.categoryItem} onPress={() => router.push(category.route)}>
+              <Image
+                source={{ uri: category.imageSrc }}
+                style={styles.categoryImage}
+              />
+              <Text style={styles.categoryText}>{category.name}</Text>
+            </Pressable>
+          ))}
+        </View>
+      </View>
+
+      {/* Cards */}
+      <View style={styles.cards}>
+        <View>
+          <Text style={{ fontSize: 20, fontWeight: "bold" }}>Mais Vendidos</Text>
+        </View>
+        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+          <View style={styles.cardContainer}>
+            <Card
+              imageSrc="https://via.placeholder.com/300"
+              name="Sanduíche de Frango"
+              description="Delicioso sanduíche de frango com queijo"
+              price="$9,99"
+            />
+            <Card
+              imageSrc="https://via.placeholder.com/300"
+              name="Refrigerante"
+              description="Refrigerante de cola gelado"
+              price="$1,99"
+            />
+            <Card
+              imageSrc="https://via.placeholder.com/300"
+              name="Batata Frita"
+              description="Batata frita crocante"
+              price="$4,99"
+            />
+          </View>
+        </ScrollView>
+      </View>
+      <View style={styles.cards}>
+        <View>
+          <Text style={{ fontSize: 20, fontWeight: "bold" }}>Mais Vendidos</Text>
+        </View>
+        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+          <View style={styles.cardContainer}>
+            <Card
+              imageSrc="https://via.placeholder.com/300"
+              name="Sanduíche de Frango"
+              description="Delicioso sanduíche de frango com queijo"
+              price="$9,99"
+            />
+            <Card
+              imageSrc="https://via.placeholder.com/300"
+              name="Refrigerante"
+              description="Refrigerante de cola gelado"
+              price="$1,99"
+            />
+            <Card
+              imageSrc="https://via.placeholder.com/300"
+              name="Batata Frita"
+              description="Batata frita crocante"
+              price="$4,99"
+            />
+          </View>
+        </ScrollView>
+      </View>
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flexGrow: 1, 
-    backgroundColor: '#f5f5f5',
-    padding: 12, 
+    flexGrow: 1,
+    backgroundColor: "#f5f5f5",
+    padding: 5,
   },
-  reactLogo: {
-    height: 150,
-    width: 150,
-    marginBottom: 20,
+
+  // cat
+
+  categoryContainer: {
+    padding: 10,
   },
-  title: {
-    fontSize: 24,
+
+  categoryImage: {
+    width: 100,
+    height: 100,
+    resizeMode: "cover",
+    marginBottom: 5,
+    borderRadius: 50,
+  },
+
+  categoryItems: {
+    flexDirection: "row",
+    gap: 10,
+  },
+
+  categoryItem: {
+    borderRadius: 10,
+    marginBottom: 10,
+  },
+
+  categoryText: {
+    fontSize: 14,
     fontWeight: 'bold',
-    color: '#333',
+  },
+
+  //cards
+
+  cards: {
+    gap: 10,
+    padding: 10,
+  },
+  cardContainer: {
+    flexDirection: "row",
+    gap: 10,
   },
 });

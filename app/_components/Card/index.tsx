@@ -3,11 +3,11 @@ import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 
 interface CardProps {
-    imageSrc: string;
-    name: string;
-    description: string;
-    price: string;
-  }
+  imageSrc: string;
+  name: string;
+  description: string;
+  price: string;
+}
 
 export default function Card({ imageSrc, name, description, price }: CardProps) {
   return (
@@ -16,7 +16,9 @@ export default function Card({ imageSrc, name, description, price }: CardProps) 
       <View style={styles.content}>
         <Text style={styles.name}>{name}</Text>
         <Text style={styles.description}>{description}</Text>
-        <Text style={styles.price}>{price}</Text>
+        <View style={styles.priceContainer}>
+          <Text style={styles.price}>{price}</Text>
+        </View>
       </View>
       <TouchableOpacity style={styles.icon}>
         <AntDesign name="shoppingcart" size={24} color="white" />
@@ -28,15 +30,11 @@ export default function Card({ imageSrc, name, description, price }: CardProps) 
 const styles = StyleSheet.create({
   card: {
     backgroundColor: 'white',
-    borderRadius: 10,
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
+    borderRadius: 20,
     overflow: 'hidden',
     marginBottom: 20,
-    width: 300,
+    width: 200,
+    height: 260,
   },
   image: {
     width: '100%',
@@ -45,6 +43,9 @@ const styles = StyleSheet.create({
   },
   content: {
     padding: 10,
+    alignItems: 'stretch',
+    flex: 1,
+    justifyContent: 'space-between',
   },
   name: {
     fontSize: 16,
@@ -53,20 +54,21 @@ const styles = StyleSheet.create({
   description: {
     fontSize: 14,
     color: 'gray',
-    marginTop: 4,
+    marginTop: -10,
+  },
+  priceContainer: {
+    alignItems: 'flex-start',
   },
   price: {
-    fontSize: 16,
-    color: 'green',
-    marginTop: 8,
+    fontSize: 22,
+    color: '#000',
     fontWeight: 'bold',
   },
   icon: {
     position: 'absolute',
-    bottom: 10,
-    right: 10,
+    bottom: 0,
+    right: 0,
     backgroundColor: '#d30000',
-    borderRadius: 50,
-    padding: 10,
+    padding: 12,
   },
 });
