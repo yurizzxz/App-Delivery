@@ -61,12 +61,12 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   notificationTitle: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: "bold",
     color: "#333",
   },
   notificationMessage: {
-    fontSize: 14,
+    fontSize: 16,
     color: "#777",
     marginVertical: 5,
   },

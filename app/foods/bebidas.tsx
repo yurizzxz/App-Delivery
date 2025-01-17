@@ -8,14 +8,20 @@ import { AntDesign } from "@expo/vector-icons";
 
 const statusBarHeight: number = Constants.statusBarHeight;
 
-const router = useRouter();
-
 export default function BebidasScreen() {
+  const router = useRouter();
+
   return (
-    <ScrollView style={[styles.container, { marginTop: statusBarHeight, paddingTop: 20 }]}>
+    <ScrollView style={[styles.container, { marginTop: statusBarHeight }]}>
       <View style={styles.header}>
-        <Header title="Lanches" />
-        <AntDesign name="arrowright" onclick={() => router.back()} size={24} color="#000" style={styles.arrowIcon} />
+        <AntDesign
+          name="arrowleft"
+          onPress={() => router.back()} 
+          size={24}
+          color="#000"
+          style={styles.arrowIcon}
+        />
+        <Header title="Bebidas" />
       </View>
 
       <View style={styles.cardContainer}>
@@ -47,25 +53,24 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#f5f5f5",
     padding: 10,
-    paddingTop: 40,
   },
 
   header: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: 15,
-    marginBottom: 15,
+    justifyContent: "flex-start", 
+    marginBottom: 10,
   },
 
   arrowIcon: {
-    marginLeft: 10,
+    marginRight: 20, 
+    marginTop: 5
   },
+
 
   cardContainer: {
     gap: 15,
     flexDirection: "row",
     flexWrap: "wrap",
-    marginTop: 15,
   },
 });

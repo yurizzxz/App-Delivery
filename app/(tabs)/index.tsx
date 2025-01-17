@@ -79,7 +79,7 @@ export default function HomeScreen() {
       {/* Cards */}
       <View style={styles.cards}>
         <View>
-          <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+          <Text style={{ fontSize: 23, fontWeight: "bold" }}>
             Mais Vendidos
           </Text>
         </View>
@@ -108,7 +108,7 @@ export default function HomeScreen() {
       </View>
       <View style={styles.cards}>
         <View>
-          <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+          <Text style={{ fontSize: 23, fontWeight: "bold" }}>
             Mais Vendidos
           </Text>
         </View>

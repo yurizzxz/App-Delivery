@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   statusText: {
-    fontSize: 16,
+    fontSize: 17,
     color: "#000",
   },
   statusHighlight: {
@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
   },
   optionText: {
     textAlign: "center",
-    fontSize: 16,
+    fontSize: 18,
     color: "#000",
   },
   favoritesContainer: {
@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
   },
   favoriteText: {
     textAlign: "center",
-    fontSize: 16,
+    fontSize: 18,
     color: "#000",
   },
   whatsappButton: {
@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
   },
   whatsappText: {
     textAlign: "center",
-    fontSize: 16,
+    fontSize: 18,
     color: "#000",
   },
 });
