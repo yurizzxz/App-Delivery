@@ -7,7 +7,7 @@ interface ButtonProps {
   disabled?: boolean;
 }
 
-export default function ButtonRed({ onPress, title, disabled = false }: ButtonProps) {
+export default function Button({ onPress, title, disabled = false }: ButtonProps) {
   return (
     <TouchableOpacity 
       style={[styles.button, disabled && styles.disabledButton]} 

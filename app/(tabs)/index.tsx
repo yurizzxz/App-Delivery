@@ -12,23 +12,29 @@ import Card from "../_components/Card";
 import SearchInput from "../_components/Search";
 import { useRouter } from 'expo-router';
 
-const statusBarHeight = Constants.statusBarHeight;
+const statusBarHeight: number = Constants.statusBarHeight;
 
-const categories = [
+type Category = {
+  name: string;
+  imageSrc: string;
+  route: string;
+};
+
+const categories: Category[] = [
   {
     name: "Lanches",
     imageSrc: "https://via.placeholder.com/100x100",
-    route: '/categories/lanches'
+    route: '../routes/categories/lanches'
   },
   {
     name: "Pizzas",
     imageSrc: "https://via.placeholder.com/100x100",
-    route: '/categories/pizzas'
+    route: '../routes/categories/pizzas'
   },
   {
     name: "Bebidas",
     imageSrc: "https://via.placeholder.com/100x100",
-    route: '/categories/bebidas'
+    route: '../routes/categories/bebidas'
   },
 ];
 
@@ -39,7 +45,7 @@ export default function HomeScreen() {
     <ScrollView
       contentContainerStyle={[
         styles.container,
-        { marginTop: statusBarHeight, paddingTop: 20 },
+        { marginTop: statusBarHeight, paddingTop: 20, paddingBottom: 40 },
       ]}
     >
       <Header

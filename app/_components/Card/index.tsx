@@ -33,12 +33,12 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     overflow: 'hidden',
     marginBottom: 20,
-    width: 200,
-    height: 260,
+    width: 170,
+    height: 220,
   },
   image: {
     width: '100%',
-    height: 150,
+    height: 120,
     resizeMode: 'cover',
   },
   content: {

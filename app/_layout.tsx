@@ -7,6 +7,7 @@ export default function RootLayout() {
       <StatusBar backgroundColor="transparent" translucent />
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="routes/categories" />
       </Stack>
     </>
   );
