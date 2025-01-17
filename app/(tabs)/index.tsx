@@ -7,10 +7,10 @@ import {
   Pressable,
 } from "react-native";
 import Constants from "expo-constants";
-import Header from "../_components/Header";
+import Greeting from "../_components/Greeting";
 import Card from "../_components/Card";
 import SearchInput from "../_components/Search";
-import { useRouter } from 'expo-router';
+import { useRouter } from "expo-router";
 
 const statusBarHeight: number = Constants.statusBarHeight;
 
@@ -24,17 +24,17 @@ const categories: Category[] = [
   {
     name: "Lanches",
     imageSrc: "https://via.placeholder.com/100x100",
-    route: '../routes/categories/lanches'
+    route: "../lanches",
   },
   {
     name: "Pizzas",
     imageSrc: "https://via.placeholder.com/100x100",
-    route: '../routes/categories/pizzas'
+    route: "../pizzas",
   },
   {
     name: "Bebidas",
     imageSrc: "https://via.placeholder.com/100x100",
-    route: '../routes/categories/bebidas'
+    route: "../bebidas",
   },
 ];
 
@@ -48,7 +48,8 @@ export default function HomeScreen() {
         { marginTop: statusBarHeight, paddingTop: 20, paddingBottom: 40 },
       ]}
     >
-      <Header
+      <Greeting
+        greeting="Bem vindo,"
         title="usuário"
         onProfilePress={() => {}}
         profileImageUri={null}
@@ -60,7 +61,11 @@ export default function HomeScreen() {
       <View style={styles.categoryContainer}>
         <View style={styles.categoryItems}>
           {categories.map((category, index) => (
-            <Pressable key={index} style={styles.categoryItem} onPress={() => router.push(category.route)}>
+            <Pressable
+              key={index}
+              style={styles.categoryItem}
+              onPress={() => router.push(category.route)}
+            >
               <Image
                 source={{ uri: category.imageSrc }}
                 style={styles.categoryImage}
@@ -74,7 +79,9 @@ export default function HomeScreen() {
       {/* Cards */}
       <View style={styles.cards}>
         <View>
-          <Text style={{ fontSize: 20, fontWeight: "bold" }}>Mais Vendidos</Text>
+          <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+            Mais Vendidos
+          </Text>
         </View>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           <View style={styles.cardContainer}>
@@ -101,7 +108,9 @@ export default function HomeScreen() {
       </View>
       <View style={styles.cards}>
         <View>
-          <Text style={{ fontSize: 20, fontWeight: "bold" }}>Mais Vendidos</Text>
+          <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+            Mais Vendidos
+          </Text>
         </View>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           <View style={styles.cardContainer}>
@@ -163,7 +172,7 @@ const styles = StyleSheet.create({
 
   categoryText: {
     fontSize: 14,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
 
   //cards

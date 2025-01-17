@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import Button from "../_components/Button";
 import Constants from "expo-constants";
+import Header from "../_components/Header";
 
 const statusBarHeight: number = Constants.statusBarHeight;
 export default function Profile() {
@@ -16,7 +17,7 @@ export default function Profile() {
     <View
       style={[styles.container, { marginTop: statusBarHeight, paddingTop: 30 }]}
     >
-      <Text style={styles.title}>Perfil</Text>
+      <Header title="Perfil" />
       <View style={styles.profileContainer}>
         <View style={styles.avatar} />
         <View>
@@ -65,7 +66,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#F5F5F5",
-    padding: 20,
+    padding: 15,
   },
   title: {
     fontSize: 24,

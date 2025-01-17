@@ -11,6 +11,7 @@ import {
 import Constants from "expo-constants";
 import { AntDesign } from "@expo/vector-icons";
 import Button from "../_components/Button";
+import Header from "../_components/Header";
 
 const statusBarHeight: number = Constants.statusBarHeight;
 
@@ -111,7 +112,7 @@ export default function CartScreen() {
       <ScrollView
         style={[styles.container, { marginTop: statusBarHeight, paddingTop: 30 }]}
       >
-        <Text style={styles.title}>Carrinho de Compras</Text>
+        <Header title="Carrinho" />
         <FlatList
           data={cartItems}
           renderItem={renderItem}
@@ -134,7 +135,7 @@ export default function CartScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10,
+    padding: 15,
   },
   title: {
     fontSize: 24,
@@ -200,7 +201,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     right: 0,
     bottom: 0,
-    borderBottomEndRadius: 20
+    borderBottomEndRadius: 10
   },
   totalContainer: {
     marginTop: 20,
