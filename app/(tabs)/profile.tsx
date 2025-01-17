@@ -15,7 +15,7 @@ const statusBarHeight: number = Constants.statusBarHeight;
 export default function Profile() {
   return (
     <View
-      style={[styles.container, { marginTop: statusBarHeight, paddingTop: 30 }]}
+      style={[styles.container, { marginTop: statusBarHeight}]}
     >
       <Header title="Perfil" />
       <View style={styles.profileContainer}>
@@ -125,13 +125,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     marginBottom: 20,
+    gap: 10
   },
   favoriteButton: {
     flex: 1,
     backgroundColor: "#ECECEC",
     borderRadius: 5,
     paddingVertical: 15,
-    marginHorizontal: 5,
   },
   favoriteText: {
     textAlign: "center",

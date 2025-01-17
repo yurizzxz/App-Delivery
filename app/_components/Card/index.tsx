@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     marginBottom: 20,
     width: 170,
-    height: 220,
+    height: 230,
   },
   image: {
     width: '100%',
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
   },
   content: {
-    padding: 10,
+    padding: 13,
     alignItems: 'stretch',
     flex: 1,
     justifyContent: 'space-between',
@@ -55,6 +55,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: 'gray',
     marginTop: -10,
+    paddingRight: 20
   },
   priceContainer: {
     alignItems: 'flex-start',
@@ -68,7 +69,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     right: 0,
-    backgroundColor: '#d30000',
-    padding: 12,
+    backgroundColor: '#ff0000',
+    padding: 10,
   },
 });

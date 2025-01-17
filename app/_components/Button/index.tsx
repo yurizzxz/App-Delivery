@@ -22,12 +22,12 @@ export default function Button({ onPress, title, disabled = false }: ButtonProps
 const styles = StyleSheet.create({
   button: {
     backgroundColor: '#ff0000',
-    paddingVertical: 12,
+    paddingVertical: 15,
     paddingHorizontal: 20,
     borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
-    elevation: 3,
+
   },
   disabledButton: {
     backgroundColor: 'gray',

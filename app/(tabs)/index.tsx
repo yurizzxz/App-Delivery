@@ -24,17 +24,17 @@ const categories: Category[] = [
   {
     name: "Lanches",
     imageSrc: "https://via.placeholder.com/100x100",
-    route: "../lanches",
+    route: "../foods/lanches",
   },
   {
     name: "Pizzas",
     imageSrc: "https://via.placeholder.com/100x100",
-    route: "../pizzas",
+    route: "../foods/pizzas",
   },
   {
     name: "Bebidas",
     imageSrc: "https://via.placeholder.com/100x100",
-    route: "../bebidas",
+    route: "../foods/bebidas",
   },
 ];
 

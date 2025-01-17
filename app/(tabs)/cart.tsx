@@ -82,7 +82,9 @@ export default function CartScreen() {
     <View style={styles.cartItem}>
       <Image source={{ uri: item.image }} style={styles.itemImage} />
       <View style={styles.itemDetails}>
-        <Text style={styles.itemName}><Text style={{color: "#dd0000"}}>{item.number}</Text> {item.name}</Text>
+        <Text style={styles.itemName}>
+          <Text style={{ color: "#ff0000" }}>{item.number}</Text> {item.name}
+        </Text>
         <Text style={styles.itemDescription}>R$ {item.description}</Text>
         <Text style={styles.itemPrice}>R$ {item.price}</Text>
         <View style={styles.quantityContainer}>
@@ -101,7 +103,10 @@ export default function CartScreen() {
           </TouchableOpacity>
         </View>
       </View>
-      <TouchableOpacity onPress={() => handleRemoveItem(item.id)} style={styles.removeButton}>
+      <TouchableOpacity
+        onPress={() => handleRemoveItem(item.id)}
+        style={styles.removeButton}
+      >
         <AntDesign name="delete" size={20} color="white" />
       </TouchableOpacity>
     </View>
@@ -110,9 +115,14 @@ export default function CartScreen() {
   return (
     <View style={{ flex: 1, backgroundColor: "#f5f5f5" }}>
       <ScrollView
-        style={[styles.container, { marginTop: statusBarHeight, paddingTop: 30 }]}
+        style={[
+          styles.container,
+          { marginTop: statusBarHeight },
+        ]}
+        contentContainerStyle={{ flexGrow: 1 }}
       >
         <Header title="Carrinho" />
+
         <FlatList
           data={cartItems}
           renderItem={renderItem}
@@ -120,13 +130,13 @@ export default function CartScreen() {
           contentContainerStyle={styles.cartList}
         />
       </ScrollView>
+
       <View style={styles.totalContainer}>
         <Text style={styles.totalText}>
           Total a pagar: R${" "}
           {cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0)}
         </Text>
-        <Button onPress={() => {}} title="Finalizar compra" >
-        </Button>
+        <Button onPress={() => {}} title="Finalizar compra" />
       </View>
     </View>
   );
@@ -145,7 +155,6 @@ const styles = StyleSheet.create({
   },
   cartList: {
     paddingBottom: 20,
-    
   },
   cartItem: {
     flexDirection: "row",
@@ -188,7 +197,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginTop: 10,
-    
   },
   quantityButton: {
     backgroundColor: "#ECECEC",
@@ -201,7 +209,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     right: 0,
     bottom: 0,
-    borderBottomEndRadius: 10
+    borderBottomEndRadius: 10,
   },
   totalContainer: {
     marginTop: 20,
@@ -209,7 +217,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   totalText: {
-    fontSize: 18,
+    fontSize: 22,
     fontWeight: "bold",
     color: "#000",
     marginBottom: 10,
