@@ -1,23 +1,25 @@
-import { Image, StyleSheet, View, Text } from 'react-native';
+import { Image, StyleSheet, View, Text, ScrollView } from 'react-native';
+import Constants from 'expo-constants';
+
+const statusBarHeight = Constants.statusBarHeight;
 
 export default function HomeScreen() {
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={[styles.container, { marginTop: statusBarHeight, paddingTop: 10}]}>
       <Image
         source={require('@/assets/images/partial-react-logo.png')}
         style={styles.reactLogo}
       />
       <Text style={styles.title}>Welcome to Home!</Text>
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexGrow: 1, 
     backgroundColor: '#f5f5f5',
+    padding: 12, 
   },
   reactLogo: {
     height: 150,

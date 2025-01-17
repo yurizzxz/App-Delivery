@@ -1,7 +1,7 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
-import { View, Text } from 'react-native';
-import { IconSymbol } from '@/components/ui/IconSymbol';
+import { Tabs } from "expo-router";
+import React from "react";
+import { Text } from "react-native";
+import { AntDesign } from "@expo/vector-icons";
 
 export default function TabLayout() {
   return (
@@ -13,30 +13,48 @@ export default function TabLayout() {
         },
         tabBarStyle: {
           height: 60,
-          paddingTop: 10,
+          paddingTop: 6,
         },
-      }}>
+        tabBarActiveTintColor: '#d30000', 
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
-          title: '',
+          title: "",
           tabBarIcon: ({ color }) => (
-            <View style={{ alignItems: 'center' }}>
-              <IconSymbol size={28} name="house.fill" color={color} />
-              <Text style={{ color, fontSize: 12 }}>Home</Text>
-            </View>
+            <AntDesign name="home" size={25} color={color} />
+          ),
+          tabBarLabel: ({ color }) => (
+            <Text style={{ color, fontSize: 12, paddingTop: 3 }}>Home</Text>
           ),
         }}
       />
+
       <Tabs.Screen
-        name="explore"
+        name="coupons"
         options={{
-          title: '',
+          title: "",
           tabBarIcon: ({ color }) => (
-            <View style={{ alignItems: 'center' }}>
-              <IconSymbol size={28} name="paperplane.fill" color={color} />
-              <Text style={{ color, fontSize: 12 }}>Explore</Text>
-            </View>
+            <AntDesign name="tag" size={25} color={color} />
+          ),
+          tabBarLabel: ({ color }) => (
+            <Text style={{ color, fontSize: 12, paddingTop: 3 }}>
+              Cupons
+            </Text>
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: "",
+          tabBarIcon: ({ color }) => (
+            <AntDesign name="user" size={25} color={color} />
+          ),
+          tabBarLabel: ({ color }) => (
+            <Text style={{ color, fontSize: 12, paddingTop: 3 }}>Perfil</Text>
           ),
         }}
       />
