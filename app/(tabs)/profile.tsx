@@ -1,13 +1,21 @@
 import React from "react";
-import { View, Text, Image, TouchableOpacity, StyleSheet, Pressable } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  StyleSheet,
+  Pressable,
+} from "react-native";
 import Button from "../_components/Button";
 import Constants from "expo-constants";
 
 const statusBarHeight: number = Constants.statusBarHeight;
 export default function Profile() {
-
   return (
-    <View style={[styles.container, { marginTop: statusBarHeight, paddingTop: 30,}]}>
+    <View
+      style={[styles.container, { marginTop: statusBarHeight, paddingTop: 30 }]}
+    >
       <Text style={styles.title}>Perfil</Text>
       <View style={styles.profileContainer}>
         <View style={styles.avatar} />
@@ -19,6 +27,10 @@ export default function Profile() {
         </View>
       </View>
 
+      <View
+        style={{ height: 1, backgroundColor: "#1e1e1e1d", marginVertical: 20 }}
+      ></View>
+
       {/* Options */}
       <View style={styles.statusContainer}>
         <Text style={styles.statusText}>
@@ -29,20 +41,22 @@ export default function Profile() {
           Previsão de entrega: <Text style={styles.statusHighlight}>21h40</Text>
         </Text>
       </View>
-      <TouchableOpacity style={styles.optionButton}>
-        <Text style={styles.optionText}>Histórico de pedidos</Text>
-      </TouchableOpacity>
-      <View style={styles.favoritesContainer}>
-        <TouchableOpacity style={styles.favoriteButton}>
-          <Text style={styles.favoriteText}>Pizzas Favoritas</Text>
+      <View>
+        <TouchableOpacity style={styles.optionButton}>
+          <Text style={styles.optionText}>Histórico de pedidos</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.favoriteButton}>
-          <Text style={styles.favoriteText}>Lanches Favoritos</Text>
+        <View style={styles.favoritesContainer}>
+          <TouchableOpacity style={styles.favoriteButton}>
+            <Text style={styles.favoriteText}>Pizzas Favoritas</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.favoriteButton}>
+            <Text style={styles.favoriteText}>Lanches Favoritos</Text>
+          </TouchableOpacity>
+        </View>
+        <TouchableOpacity style={styles.whatsappButton}>
+          <Text style={styles.whatsappText}>Peça via WhatsApp</Text>
         </TouchableOpacity>
       </View>
-      <TouchableOpacity style={styles.whatsappButton}>
-        <Text style={styles.whatsappText}>Peça via WhatsApp</Text>
-      </TouchableOpacity>
     </View>
   );
 }
@@ -63,37 +77,29 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 20,
     flexDirection: "row",
-    gap: 20
+    gap: 20,
   },
   avatar: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
+    width: 120,
+    height: 120,
+    borderRadius: 60,
     backgroundColor: "#ccc",
     marginBottom: 10,
   },
   username: {
-    fontSize: 18,
+    fontSize: 22,
     fontWeight: "bold",
     color: "#000",
   },
   email: {
-    fontSize: 14,
+    fontSize: 16,
     color: "#888",
     marginBottom: 10,
   },
-  editButton: {
-    backgroundColor: "#ff0000",
-    borderRadius: 5,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-  },
-  editButtonText: {
-    color: "#fff",
-    fontWeight: "bold",
-  },
+
   statusContainer: {
-    marginBottom: 20,
+    marginTop: 15,
+    marginBottom: 30,
   },
   statusText: {
     fontSize: 16,

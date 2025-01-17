@@ -1,7 +1,7 @@
 import { Tabs } from "expo-router";
 import React from "react";
 import { Text } from "react-native";
-import { AntDesign } from "@expo/vector-icons";
+import { AntDesign, MaterialIcons } from "@expo/vector-icons";
 
 export default function TabLayout() {
   return (
@@ -15,7 +15,7 @@ export default function TabLayout() {
           height: 60,
           paddingTop: 6,
         },
-        tabBarActiveTintColor: '#d30000', 
+        tabBarActiveTintColor: '#ff0000',
       }}
     >
       <Tabs.Screen
@@ -39,8 +39,36 @@ export default function TabLayout() {
             <AntDesign name="tag" size={25} color={color} />
           ),
           tabBarLabel: ({ color }) => (
+            <Text style={{ color, fontSize: 12, paddingTop: 3 }}>Cupons</Text>
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="cart"
+        options={{
+          title: "",
+          tabBarIcon: ({ color }) => (
+            <AntDesign name="shoppingcart" size={30} color={color} />
+          ),
+          tabBarLabel: ({ color }) => (
             <Text style={{ color, fontSize: 12, paddingTop: 3 }}>
-              Cupons
+              Carrinho
+            </Text>
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="notifications"
+        options={{
+          title: "",
+          tabBarIcon: ({ color }) => (
+            <MaterialIcons name="notifications" size={25} color={color} />
+          ),
+          tabBarLabel: ({ color }) => (
+            <Text style={{ color, fontSize: 12, paddingTop: 3 }}>
+              Notificações
             </Text>
           ),
         }}
