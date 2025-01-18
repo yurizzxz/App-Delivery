@@ -34,11 +34,11 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     marginBottom: 20,
     width: 170,
-    height: 230,
+    height: 245,
   },
   image: {
     width: '100%',
-    height: 120,
+    height: '65%',
     resizeMode: 'cover',
   },
   content: {
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
   description: {
     fontSize: 14,
     color: 'gray',
-    marginTop: -10,
+    marginTop: -5,
     paddingRight: 20
   },
   priceContainer: {

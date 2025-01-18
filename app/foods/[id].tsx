@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: "100%",
-    height: 300,
+    height: 340,
     resizeMode: "cover",
   },
   detailsContainer: {
@@ -118,7 +118,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#f5f5f5",
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    padding: 15,
+    paddingHorizontal: 15,
+    paddingTop: 20
   },
   titleContainer: {
     flexDirection: "row",

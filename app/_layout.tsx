@@ -7,6 +7,7 @@ export default function RootLayout() {
     <>
       <StatusBar backgroundColor="transparent" translucent />
       <Stack screenOptions={{ headerShown: false }}>
+        
         <Stack.Screen name="(tabs)" />
 
         <Stack.Screen name="foods" />

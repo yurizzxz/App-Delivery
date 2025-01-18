@@ -5,7 +5,9 @@ import Card from "../_components/Card";
 import SearchInput from "../_components/Search";
 import { useRouter } from "expo-router";
 import { useState, useEffect } from "react";
-import { fetchCards } from "../services/firebaseConfig"
+import { fetchCards } from "../services/firebaseConfig";
+import { getAuth } from "firebase/auth";
+import { getFirestore, doc, getDoc } from "firebase/firestore";
 
 const statusBarHeight: number = Constants.statusBarHeight;
 
@@ -43,6 +45,7 @@ type CardType = {
 
 export default function HomeScreen() {
   const [cards, setCards] = useState<CardType[]>([]);
+  const [userName, setUserName] = useState<string | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -54,23 +57,35 @@ export default function HomeScreen() {
     loadCards();
   }, []);
 
+  useEffect(() => {
+    const getUserData = async () => {
+      const auth = getAuth();
+      const user = auth.currentUser;
+      if (user) {
+        const db = getFirestore();
+        const userDocRef = doc(db, "users", user.uid);
+        const userDoc = await getDoc(userDocRef);
+        if (userDoc.exists()) {
+          setUserName(userDoc.data().name);
+        }
+      }
+    };
+
+    getUserData();
+  }, []);
+
   return (
     <ScrollView
-      contentContainerStyle={[
-        styles.container,
-        { marginTop: statusBarHeight, paddingTop: 20, paddingBottom: 40 },
-      ]}
+      contentContainerStyle={[styles.container, { marginTop: statusBarHeight, paddingTop: 20, paddingBottom: 40 }]}
     >
       <Greeting
         greeting="Bem vindo,"
-        title="usuário"
+        title={userName || "usuário"} // Display the name if available
         onProfilePress={() => {}}
         profileImageUri={null}
       />
 
-      {/* Search */}
-      <SearchInput placeholder="O que você procura?" onChangeText={() => {}} />
-
+      <SearchInput placeholder="O que você procura?" onChangeText={() => {}} />
 
       {/* Categorias */}
       <View style={styles.categoryContainer}>
