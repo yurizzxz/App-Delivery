@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { View, ScrollView, StyleSheet, ActivityIndicator } from "react-native";
+import {
+  View,
+  ScrollView,
+  StyleSheet,
+  ActivityIndicator,
+  Pressable,
+} from "react-native";
 import Card from "@/app/_components/Card";
 import Header from "@/app/_components/Header";
 import Constants from "expo-constants";
@@ -18,7 +24,7 @@ interface CardType {
   category: string;
 }
 
-export default function PizzaScreen() {
+export default function LanchesScreen() {
   const router = useRouter();
   const [cards, setCards] = useState<CardType[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -26,7 +32,7 @@ export default function PizzaScreen() {
   useEffect(() => {
     const getCards = async () => {
       const fetchedCards = await fetchCards();
-      setCards(fetchedCards.filter(card => card.category === "pizza"));
+      setCards(fetchedCards.filter((card) => card.category === "pizza"));
       setLoading(false);
     };
     getCards();
@@ -50,13 +56,17 @@ export default function PizzaScreen() {
       ) : (
         <View style={styles.cardContainer}>
           {cards.map((card) => (
-            <Card
+            <Pressable
               key={card.id}
-              imageSrc={card.imageSrc}
-              name={card.name}
-              description={card.description}
-              price={card.price}
-            />
+              onPress={() => router.push(`./${card.id}`)}
+            >
+              <Card
+                imageSrc={card.imageSrc}
+                name={card.name}
+                description={card.description}
+                price={card.price}
+              />
+            </Pressable>
           ))}
         </View>
       )}

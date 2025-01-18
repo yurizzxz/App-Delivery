@@ -57,7 +57,7 @@ export default function Profile() {
           <Text style={styles.email}>{userEmail}</Text>
           <Button
             onPress={() =>
-              userId && router.push(`../profileOptions/${userId}`) 
+              userId && router.push(`../profile/${userId}`) 
             }
             title="Editar informações"
           />
@@ -65,35 +65,26 @@ export default function Profile() {
       </View>
 
       <View
-        style={{ height: 1, backgroundColor: "#1e1e1e1d", marginVertical: 20 }}
+        style={{ height: 1, backgroundColor: "#1e1e1e1d", marginTop: 20, marginBottom: 40 }}
       ></View>
 
       {/* Options */}
-      <View style={styles.statusContainer}>
-        <Text style={styles.statusText}>
-          Status do pedido:{" "}
-          <Text style={styles.statusHighlight}>Em produção</Text>
-        </Text>
-        <Text style={styles.statusText}>
-          Previsão de entrega: <Text style={styles.statusHighlight}>21h40</Text>
-        </Text>
-      </View>
       <View>
         <TouchableOpacity
-          onPress={() => router.push("../profileOptions/pedidos")}
+          onPress={() => router.push("../profile/pedidos")}
           style={styles.optionButton}
         >
           <Text style={styles.optionText}>Histórico de pedidos</Text>
         </TouchableOpacity>
         <View style={styles.favoritesContainer}>
           <TouchableOpacity
-            onPress={() => router.push("../profileOptions/pizzasfav")}
+            onPress={() => router.push("../profile/pizzasfav")}
             style={styles.favoriteButton}
           >
             <Text style={styles.favoriteText}>Pizzas Favoritas</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => router.push("../profileOptions/lanchesfav")}
+            onPress={() => router.push("../profile/lanchesfav")}
             style={styles.favoriteButton}
           >
             <Text style={styles.favoriteText}>Lanches Favoritos</Text>

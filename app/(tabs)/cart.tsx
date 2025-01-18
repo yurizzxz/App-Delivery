@@ -13,7 +13,16 @@ import { AntDesign } from "@expo/vector-icons";
 import Button from "../_components/Button";
 import Header from "../_components/Header";
 import { getAuth } from "firebase/auth";
-import { getFirestore, doc, onSnapshot, updateDoc, arrayRemove, arrayUnion, setDoc } from "firebase/firestore";
+import {
+  getFirestore,
+  doc,
+  onSnapshot,
+  updateDoc,
+  arrayRemove,
+  arrayUnion,
+  setDoc,
+} from "firebase/firestore";
+import { useRouter } from "expo-router";
 
 const statusBarHeight: number = Constants.statusBarHeight;
 
@@ -30,33 +39,33 @@ type CartItem = {
 export default function CartScreen() {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     const auth = getAuth();
     const user = auth.currentUser;
-  
+
     if (!user) {
       console.error("Usuário não está autenticado.");
       setLoading(false);
       return;
     }
-  
+
     const db = getFirestore();
     const userCartRef = doc(db, "carts", user.uid);
-  
+
     const unsubscribe = onSnapshot(userCartRef, (snapshot) => {
       if (snapshot.exists()) {
         const cartData = snapshot.data();
         setCartItems(cartData?.items || []);
       } else {
-        console.warn("Nenhum prouduto adicionado ao carrinho.");
+        console.warn("Nenhum produto adicionado ao carrinho.");
       }
       setLoading(false);
     });
-  
+
     return () => unsubscribe();
   }, []);
-  
 
   const handleRemoveItem = async (id: string) => {
     const auth = getAuth();
@@ -104,78 +113,48 @@ export default function CartScreen() {
   const handleDecreaseQuantity = async (id: string) => {
     const auth = getAuth();
     const user = auth.currentUser;
-  
+
     if (!user) return;
-  
+
     const db = getFirestore();
     const userCartRef = doc(db, "carts", user.uid);
-  
+
     const itemToUpdate = cartItems.find((item) => item.id === id);
-  
+
     if (!itemToUpdate) return;
-  
+
     if (itemToUpdate.quantity > 1) {
       const updatedCartItems = cartItems.map((item) =>
         item.id === id ? { ...item, quantity: item.quantity - 1 } : item
       );
       setCartItems(updatedCartItems);
-  
+
       await updateDoc(userCartRef, {
         items: arrayRemove(itemToUpdate),
       });
-  
+
       await updateDoc(userCartRef, {
-        items: arrayUnion({ ...itemToUpdate, quantity: itemToUpdate.quantity - 1 }),
+        items: arrayUnion({
+          ...itemToUpdate,
+          quantity: itemToUpdate.quantity - 1,
+        }),
       });
     } else {
       const updatedCartItems = cartItems.filter((item) => item.id !== id);
       setCartItems(updatedCartItems);
-  
+
       await updateDoc(userCartRef, {
         items: arrayRemove(itemToUpdate),
       });
     }
   };
 
-  const handleCheckout = async () => {
-    const auth = getAuth();
-    const user = auth.currentUser;
-  
-    if (!user) {
-      console.error("Usuário não autenticado.");
-      return;
-    }
-  
-    const db = getFirestore();
-    const userCartRef = doc(db, "carts", user.uid); // Referência do carrinho
-    const orderId = `${user.uid}-${new Date().getTime()}`; // Gerando um ID único com timestamp
-    const ordersRef = doc(db, "pedidos", orderId); // Criando o novo documento na coleção "pedidos"
-  
-    try {
-      // Criando o pedido
-      await setDoc(ordersRef, {
-        userId: user.uid,
-        items: cartItems,
-        totalAmount: totalAmount,
-        orderDate: new Date(),
-      });
-  
-      // Limpar os itens do carrinho após a compra
-      await updateDoc(userCartRef, {
-        items: [], // Limpar carrinho
-      });
-  
-      // Confirmação do sucesso
-      alert("Pedido efetuado com sucesso!");
-  
-      // Limpar o estado do carrinho na tela
-      setCartItems([]);
-    } catch (error) {
-      console.error("Erro ao finalizar a compra: ", error);
-      alert("Houve um erro ao processar o pedido.");
-    }
+  const handleGoToCheckout = () => {
+    router.push({
+      pathname: "../checkout",
+      params: { cartItems: JSON.stringify(cartItems), totalAmount },
+    });
   };
-  
 
   const renderItem = ({ item }: { item: CartItem }) => (
     <View style={styles.cartItem}>
@@ -212,23 +191,33 @@ export default function CartScreen() {
   );
 
   const totalAmount: string = cartItems
-  .reduce((sum: number, item: CartItem): number => 
-    sum + parseFloat(item.price as unknown as string) * item.quantity, 
-    0
-  )
-  .toFixed(2);
+    .reduce(
+      (sum: number, item: CartItem): number =>
+        sum + parseFloat(item.price as unknown as string) * item.quantity,
+      0
+    )
+    .toFixed(2);
 
+  const handleGoToFoods = () => {
+    router.push("../foods/cardapio");
+  };
 
   return (
     <View style={{ flex: 1, backgroundColor: "#f5f5f5" }}>
-      <ScrollView
-        style={[styles.container, { marginTop: statusBarHeight }]}
-        contentContainerStyle={{ flexGrow: 1 }}
+      <View
+        style={[styles.container, { marginTop: statusBarHeight, flex: 1 }]}
       >
         <Header title="Carrinho" />
 
         {loading ? (
-          <Text style={{ textAlign: "center", marginTop: 20 }}>Carregando...</Text>
+          <Text style={{ textAlign: "center", marginTop: 20 }}>
+            Carregando...
+          </Text>
+        ) : cartItems.length === 0 ? (
+          <View>
+            <Text style={{ marginBottom: 20 }}>Seu carrinho está vazio.</Text>
+            <Button onPress={handleGoToFoods} title="Ir para cardápio" />
+          </View>
         ) : (
           <FlatList
             data={cartItems}
@@ -237,13 +226,17 @@ export default function CartScreen() {
             contentContainerStyle={styles.cartList}
           />
         )}
-      </ScrollView>
+      </View>
 
       <View style={styles.totalContainer}>
-        <Text style={styles.totalText}>
-          Total a pagar: R$ {totalAmount}
-        </Text>
-        <Button onPress={handleCheckout} title="Finalizar compra" />
+        {cartItems.length > 0 && (
+          <>
+            <Text style={styles.totalText}>
+              Total a pagar: R$ {totalAmount}
+            </Text>
+            <Button onPress={handleGoToCheckout} title="Finalizar compra" />
+          </>
+        )}
       </View>
     </View>
   );

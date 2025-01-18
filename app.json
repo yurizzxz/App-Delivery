@@ -1,19 +1,21 @@
 {
   "expo": {
-    "name": "andrelanches",
+    "name": "André Lanches",
     "slug": "andrelanches",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/andree.png",
+    "icon": "./assets/images/andre.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "image": "./assets/images/screensplash.png",
+    "resizeMode": "contain",
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/andree.png",
+        "foregroundImage": "./assets/images/andre.png",
         "backgroundColor": "#d30000"
       }
     },
@@ -27,7 +29,7 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splashscreen.png",
+          "image": "./assets/images/screensplash.png",
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#d30000"

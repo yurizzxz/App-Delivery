@@ -1,7 +1,9 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity, ActivityIndicator } from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity, ActivityIndicator, Alert } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { AntDesign } from "@expo/vector-icons";
 import { useState, useEffect } from "react";
+import { getAuth } from "firebase/auth";
+import { getFirestore, doc, setDoc, arrayUnion, updateDoc } from "firebase/firestore";
 import { fetchCards } from "../services/firebaseConfig"; 
 import Button from "../_components/Button";
 
@@ -19,6 +21,33 @@ export default function FoodDetailScreen() {
   const [item, setItem] = useState<CardType | null>(null); 
   const [isFavorite, setIsFavorite] = useState(false);
   const [quantity, setQuantity] = useState(1);
+
+  const auth = getAuth();
+  const user = auth.currentUser;
+
+  const handleFavorite = async () => {
+    if (!user) {
+      Alert.alert("Erro", "Você precisa estar logado para adicionar aos favoritos.");
+      return;
+    }
+
+    const db = getFirestore();
+    const userRef = doc(db, "users", user.uid);
+    const userFavoritesRef = doc(db, "favorites", user.uid);
+
+    try {
+      await updateDoc(userRef, {
+        favorites: arrayUnion(item?.id),
+      });
+
+      setIsFavorite(!isFavorite);
+
+      Alert.alert("Sucesso", "Lanche adicionado aos favoritos.");
+    } catch (error) {
+      console.error("Erro ao adicionar aos favoritos:", error);
+      Alert.alert("Erro", "Não foi possível adicionar aos favoritos.");
+    }
+  };
 
   useEffect(() => {
     const loadItem = async () => {
@@ -53,7 +82,7 @@ export default function FoodDetailScreen() {
           <Text style={styles.title}>
             {item.name}
           </Text>
-          <TouchableOpacity onPress={() => setIsFavorite(!isFavorite)}>
+          <TouchableOpacity onPress={handleFavorite}>
             <AntDesign
               name={isFavorite ? "heart" : "hearto"}
               size={24}

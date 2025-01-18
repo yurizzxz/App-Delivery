@@ -1,11 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  ScrollView,
-  StyleSheet,
-  ActivityIndicator,
-  Pressable,
-} from "react-native";
+import { View, ScrollView, StyleSheet, ActivityIndicator } from "react-native";
 import Card from "@/app/_components/Card";
 import Header from "@/app/_components/Header";
 import Constants from "expo-constants";
@@ -24,7 +18,7 @@ interface CardType {
   category: string;
 }
 
-export default function LanchesScreen() {
+export default function CardapioScreen() {
   const router = useRouter();
   const [cards, setCards] = useState<CardType[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -32,11 +26,12 @@ export default function LanchesScreen() {
   useEffect(() => {
     const getCards = async () => {
       const fetchedCards = await fetchCards();
-      setCards(fetchedCards.filter((card) => card.category === "lanche"));
+      setCards(fetchedCards); 
       setLoading(false);
     };
     getCards();
   }, []);
+  
 
   return (
     <ScrollView style={[styles.container, { marginTop: statusBarHeight }]}>
@@ -48,7 +43,7 @@ export default function LanchesScreen() {
           color="#000"
           style={styles.arrowIcon}
         />
-        <Header title="Lanches" />
+        <Header title="Cardápio" />
       </View>
 
       {loading ? (
@@ -56,17 +51,13 @@ export default function LanchesScreen() {
       ) : (
         <View style={styles.cardContainer}>
           {cards.map((card) => (
-            <Pressable
+            <Card
               key={card.id}
-              onPress={() => router.push(`./${card.id}`)}
-            >
-              <Card
-                imageSrc={card.imageSrc}
-                name={card.name}
-                description={card.description}
-                price={card.price}
-              />
-            </Pressable>
+              imageSrc={card.imageSrc}
+              name={card.name}
+              description={card.description}
+              price={card.price}
+            />
           ))}
         </View>
       )}

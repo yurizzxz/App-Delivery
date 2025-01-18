@@ -1,4 +1,11 @@
-import { Image, StyleSheet, View, Text, ScrollView, Pressable } from "react-native";
+import {
+  Image,
+  StyleSheet,
+  View,
+  Text,
+  ScrollView,
+  Pressable,
+} from "react-native";
 import Constants from "expo-constants";
 import Greeting from "../_components/Greeting";
 import Card from "../_components/Card";
@@ -7,7 +14,7 @@ import { useRouter } from "expo-router";
 import { useState, useEffect } from "react";
 import { fetchCards } from "../services/firebaseConfig";
 import { getAuth } from "firebase/auth";
-import { getFirestore, doc, getDoc } from "firebase/firestore";
+import { getFirestore, doc, getDoc, onSnapshot } from "firebase/firestore";
 
 const statusBarHeight: number = Constants.statusBarHeight;
 
@@ -51,23 +58,27 @@ export default function HomeScreen() {
   useEffect(() => {
     const loadCards = async () => {
       const fetchedCards = await fetchCards();
-      setCards(fetchedCards); 
+      setCards(fetchedCards);
     };
 
     loadCards();
   }, []);
 
   useEffect(() => {
-    const getUserData = async () => {
+    const getUserData = () => {
       const auth = getAuth();
       const user = auth.currentUser;
       if (user) {
         const db = getFirestore();
         const userDocRef = doc(db, "users", user.uid);
-        const userDoc = await getDoc(userDocRef);
-        if (userDoc.exists()) {
-          setUserName(userDoc.data().name);
-        }
+
+        const unsubscribeUser = onSnapshot(userDocRef, (docSnapshot) => {
+          if (docSnapshot.exists()) {
+            setUserName(docSnapshot.data().name);
+          }
+        });
+
+        return () => unsubscribeUser();
       }
     };
 
@@ -76,11 +87,14 @@ export default function HomeScreen() {
 
   return (
     <ScrollView
-      contentContainerStyle={[styles.container, { marginTop: statusBarHeight, paddingTop: 20, paddingBottom: 40 }]}
+      contentContainerStyle={[
+        styles.container,
+        { marginTop: statusBarHeight, paddingTop: 20, paddingBottom: 40 },
+      ]}
     >
       <Greeting
         greeting="Bem vindo,"
-        title={userName || "usuário"} 
+        title={userName || "usuário"}
         onProfilePress={() => {}}
         profileImageUri={null}
       />
@@ -109,7 +123,9 @@ export default function HomeScreen() {
       {/* Cards */}
       <View style={styles.cards}>
         <View>
-          <Text style={{ fontSize: 23, fontWeight: "bold" }}>Mais Vendidos</Text>
+          <Text style={{ fontSize: 23, fontWeight: "bold" }}>
+            Mais Vendidos
+          </Text>
         </View>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           <View style={styles.cardContainer}>

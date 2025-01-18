@@ -1,16 +1,32 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, ScrollView, StyleSheet, Image, Modal, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  StyleSheet,
+  Image,
+  Modal,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+} from "react-native";
 import Header from "@/app/_components/Header";
 import Constants from "expo-constants";
 import { useRouter } from "expo-router";
 import { AntDesign } from "@expo/vector-icons";
 import { getAuth } from "firebase/auth";
-import { getFirestore, collection, query, where, onSnapshot } from "firebase/firestore";
+import {
+  getFirestore,
+  collection,
+  query,
+  where,
+  onSnapshot,
+} from "firebase/firestore";
 import Button from "../_components/Button";
 
 const statusBarHeight: number = Constants.statusBarHeight;
 
 type Item = {
+  id: string;
   description: string;
   imageSrc: string;
   name: string;
@@ -31,6 +47,7 @@ export default function PedidosScreen() {
   const [pedidos, setPedidos] = useState<Pedido[]>([]);
   const [selectedPedido, setSelectedPedido] = useState<Pedido | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchPedidos = () => {
@@ -69,11 +86,30 @@ export default function PedidosScreen() {
   const handleOpenModal = (pedido: Pedido) => {
     setSelectedPedido(pedido);
     setModalVisible(true);
+
+    pedido.items.forEach((item) => {
+      console.log(`Item ID ao abrir o modal: ${item.id}`);
+    });
   };
 
   const handleCloseModal = () => {
     setModalVisible(false);
     setSelectedPedido(null);
+  };
+
+  const handleItemPress = (itemId: string) => {
+    if (itemId) {
+      setLoading(true);
+      console.log(`Produto selecionado ID: ${itemId}`);
+      router.push(`./foods/${itemId}`);
+      handleCloseModal();
+    } else {
+      console.error("Item ID não encontrado");
+    }
+  };
+
+  const handleNavigateToCardapio = () => {
+    router.push("../foods/cardapio");
   };
 
   return (
@@ -89,23 +125,39 @@ export default function PedidosScreen() {
         <Header title="Histórico de Pedidos" />
       </View>
 
-      <View style={styles.cardContainer}>
-        {pedidos.map((pedido) => (
-          <TouchableOpacity key={pedido.id} onPress={() => handleOpenModal(pedido)}>
-            <View style={styles.card}>
-              <Image 
-                source={{ uri: "https://via.placeholder.com/300" }} 
-                style={styles.image}
-              />
-              <View style={styles.cardContent}>
-                <Text style={styles.title}>Pedido #{pedido.id}</Text>
-                <Text style={styles.description}>Itens: {pedido.items.length} - Total: {pedido.totalAmount}</Text>
-                <Text style={styles.date}>Data: {new Date(pedido.orderDate).toLocaleDateString()}</Text>
+      {pedidos.length === 0 ? (
+        <View style={styles.noPedidosContainer}>
+          <Text style={styles.noPedidosText}>
+            Você ainda não tem pedidos realizados.
+          </Text>
+          <Button title="Ir para Cardápio" onPress={handleNavigateToCardapio} />
+        </View>
+      ) : (
+        <View style={styles.cardContainer}>
+          {pedidos.map((pedido) => (
+            <TouchableOpacity
+              key={pedido.id}
+              onPress={() => handleOpenModal(pedido)}
+            >
+              <View style={styles.card}>
+                <Image
+                  source={{ uri: pedido.items[0].imageSrc }}
+                  style={styles.cardImage}
+                />
+                <View style={styles.cardContent}>
+                  <Text style={styles.title}>Pedido #{pedido.id}</Text>
+                  <Text style={styles.description}>
+                    Itens: {pedido.items.length} - Total: {pedido.totalAmount}
+                  </Text>
+                  <Text style={styles.date}>
+                    Data: {new Date(pedido.orderDate).toLocaleDateString()}
+                  </Text>
+                </View>
               </View>
-            </View>
-          </TouchableOpacity>
-        ))}
-      </View>
+            </TouchableOpacity>
+          ))}
+        </View>
+      )}
 
       {selectedPedido && (
         <Modal
@@ -114,25 +166,43 @@ export default function PedidosScreen() {
           transparent={true}
           onRequestClose={handleCloseModal}
         >
-          <View style={styles.modalOverlay}>
-            <View style={styles.modalContent}>
-              <Text style={styles.modalTitle}>Itens do Pedido #{selectedPedido.id}</Text>
-              <ScrollView style={styles.itemsContainer}>
-                {selectedPedido.items.map((item, index) => (
-                  <View key={index} style={styles.itemCard}>
-                    <Image source={{ uri: item.imageSrc }} style={styles.itemImage} />
-                    <View style={styles.itemDetails}>
-                      <Text style={styles.itemName}>{item.name}</Text>
-                      <Text style={styles.itemDescription}>{item.description}</Text>
-                      <Text style={styles.itemPrice}>Preço: {item.price}</Text>
-                      <Text style={styles.itemQuantity}>Quantidade: {item.quantity}</Text>
-                    </View>
-                  </View>
-                ))}
-              </ScrollView>
-              <Button title="Fechar" onPress={handleCloseModal} />
+          <TouchableWithoutFeedback onPress={handleCloseModal}>
+            <View style={styles.modalOverlay}>
+              <View style={styles.modalContent}>
+                <Text style={styles.modalTitle}>
+                  Itens do Pedido #{selectedPedido.id}
+                </Text>
+                <ScrollView style={styles.itemsContainer}>
+                  {selectedPedido.items.map((item, index) => (
+                    <TouchableOpacity
+                      key={index}
+                      onPress={() => handleItemPress(item.id)}
+                    >
+                      <View style={styles.itemCard}>
+                        <Image
+                          source={{ uri: item.imageSrc }}
+                          style={styles.itemImage}
+                        />
+                        <View style={styles.itemDetails}>
+                          <Text style={styles.itemName}>{item.name}</Text>
+                          <Text style={styles.itemDescription}>
+                            {item.description}
+                          </Text>
+                          <Text style={styles.itemPrice}>
+                            Preço: {item.price}
+                          </Text>
+                          <Text style={styles.itemQuantity}>
+                            Quantidade: {item.quantity}
+                          </Text>
+                        </View>
+                      </View>
+                    </TouchableOpacity>
+                  ))}
+                </ScrollView>
+                <Button title="Fechar" onPress={handleCloseModal} />
+              </View>
             </View>
-          </View>
+          </TouchableWithoutFeedback>
         </Modal>
       )}
     </ScrollView>
@@ -149,12 +219,18 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "flex-start", 
-    marginBottom: 10,
+    justifyContent: "flex-start",
+  },
+
+  cardImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 8,
+    marginRight: 15,
   },
 
   arrowIcon: {
-    marginRight: 20, 
+    marginRight: 20,
     marginTop: 5,
   },
 
@@ -166,11 +242,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderRadius: 8,
     overflow: "hidden",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.5,
-    marginBottom: 20,
     flexDirection: "row",
     padding: 10,
   },
@@ -270,4 +341,11 @@ const styles = StyleSheet.create({
     color: "#555",
   },
 
+  noPedidosContainer: {
+    justifyContent: "flex-start",
+  },
+
+  noPedidosText: {
+    marginBottom: 20,
+  },
 });
