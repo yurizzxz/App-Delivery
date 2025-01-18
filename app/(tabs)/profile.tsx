@@ -1,4 +1,5 @@
 import React from "react";
+import { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -12,20 +13,54 @@ import Constants from "expo-constants";
 import Header from "../_components/Header";
 import { useRouter } from "expo-router";
 
+import { getAuth } from "firebase/auth";
+import { getFirestore, doc, getDoc } from "firebase/firestore";
+
 const statusBarHeight: number = Constants.statusBarHeight;
 
 export default function Profile() {
+  const [userName, setUserName] = useState<string | null>(null);
+  const [userEmail, setUserEmail] = useState<string | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const getUserData = async () => {
+      const auth = getAuth();
+      const user = auth.currentUser;
+      if (user) {
+        setUserId(user.uid);
+        const db = getFirestore();
+        
+        const userDocRef = doc(db, "users", user.uid);
+        const userDoc = await getDoc(userDocRef);
+        if (userDoc.exists()) {
+          setUserName(userDoc.data().name);
+          setUserEmail(userDoc.data().email);
+        }
+      }
+    };
+
+    getUserData();
+  }, []);
+
   const router = useRouter();
+  
+  
   return (
     <View style={[styles.container, { marginTop: statusBarHeight }]}>
       <Header title="Perfil" />
       <View style={styles.profileContainer}>
         <View style={styles.avatar} />
         <View>
-          <Text style={styles.username}>Usuário</Text>
+          <Text style={styles.username}>{userName}</Text>
 
-          <Text style={styles.email}>email@gmail.com</Text>
-          <Button onPress={() => {}} title="Editar informações" />
+          <Text style={styles.email}>{userEmail}</Text>
+          <Button
+            onPress={() =>
+              userId && router.push(`../profileOptions/${userId}`) 
+            }
+            title="Editar informações"
+          />
         </View>
       </View>
 
@@ -44,14 +79,23 @@ export default function Profile() {
         </Text>
       </View>
       <View>
-        <TouchableOpacity onPress={() => router.push("../profileOptions/pedidos")} style={styles.optionButton}>
+        <TouchableOpacity
+          onPress={() => router.push("../profileOptions/pedidos")}
+          style={styles.optionButton}
+        >
           <Text style={styles.optionText}>Histórico de pedidos</Text>
         </TouchableOpacity>
         <View style={styles.favoritesContainer}>
-          <TouchableOpacity onPress={() => router.push("../profileOptions/pizzasfav")} style={styles.favoriteButton}>
+          <TouchableOpacity
+            onPress={() => router.push("../profileOptions/pizzasfav")}
+            style={styles.favoriteButton}
+          >
             <Text style={styles.favoriteText}>Pizzas Favoritas</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => router.push("../profileOptions/lanchesfav")} style={styles.favoriteButton}>
+          <TouchableOpacity
+            onPress={() => router.push("../profileOptions/lanchesfav")}
+            style={styles.favoriteButton}
+          >
             <Text style={styles.favoriteText}>Lanches Favoritos</Text>
           </TouchableOpacity>
         </View>

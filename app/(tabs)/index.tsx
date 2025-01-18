@@ -80,7 +80,7 @@ export default function HomeScreen() {
     >
       <Greeting
         greeting="Bem vindo,"
-        title={userName || "usuário"} // Display the name if available
+        title={userName || "usuário"} 
         onProfilePress={() => {}}
         profileImageUri={null}
       />
