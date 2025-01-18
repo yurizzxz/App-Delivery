@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, TextInput } from "react-native";
+import { View, Text, StyleSheet, TextInput, Image } from "react-native";
 import Constants from "expo-constants";
 import { useLocalSearchParams } from "expo-router";
 import { getFirestore, doc, onSnapshot, updateDoc } from "firebase/firestore";
@@ -84,10 +84,10 @@ export default function ProfileDetails() {
           color="#000"
           style={styles.arrowIcon}
         />
-        <Header title="Lanches" />
+        <Header title="Editar informações" />
       </View>
 
-      <View style={{ gap: 10 }}>
+      <View style={{ gap: 10, justifyContent: "center", flex: 1 }}>
         <TextInput
           style={styles.input}
           placeholder="Novo nome"
@@ -107,8 +107,14 @@ export default function ProfileDetails() {
           value={newPassword}
           onChangeText={setNewPassword}
         />
+        <Button title="Atualizar" onPress={handleUpdateProfile} />
+        <View style={{ alignItems: "center" }}>
+          <Image
+            source={require("@/assets/images/andree.png")}
+            style={{ width: 100, height: 100, resizeMode: "contain" }}
+          />
+        </View>
       </View>
-      <Button title="Atualizar" onPress={handleUpdateProfile} />
     </View>
   );
 }

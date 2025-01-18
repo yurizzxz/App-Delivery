@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   Alert,
+  Image,
 } from "react-native";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { getFirestore, doc, setDoc } from "firebase/firestore";
@@ -50,7 +51,13 @@ export default function CadastroScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Crie uma conta já!</Text>
+      <View style={{ alignItems: "center" }}>
+        <Image
+          source={require("@/assets/images/andree.png")}
+          style={styles.reactLogo}
+        />
+        <Text style={styles.title}>Crie uma conta já!</Text>
+      </View>
 
       <View style={{ gap: 10 }}>
         <View style={styles.inputContainer}>
@@ -121,7 +128,14 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     padding: 15,
     gap: 20,
+    paddingBottom: 40,
     backgroundColor: "#F5f5f5",
+  },
+  reactLogo: {
+    height: 100,
+    width: 150,
+    resizeMode: "contain",
+    marginBottom: 20,
   },
   title: {
     fontSize: 28,

@@ -7,14 +7,14 @@ import {
   QuerySnapshot,
 } from "firebase/firestore";
 
-export const  firebaseConfig = {
-  apiKey: "AIzaSyCHF3maIC0GwDLJTF9fY0Bh5QrFvnVJCj8",
-  authDomain: "andrelanchesepizzas.firebaseapp.com",
-  projectId: "andrelanchesepizzas",
-  storageBucket: "andrelanchesepizzas.firebasestorage.app",
-  messagingSenderId: "1082406936540",
-  appId: "1:1082406936540:web:76ba7ab8eacf2a68783919",
-  measurementId: "G-XJFSZ822J5",
+export const firebaseConfig = {
+  apiKey: "#",
+  authDomain: "#",
+  projectId: "#",
+  storageBucket: "#",
+  messagingSenderId: "#",
+  appId: "#",
+  measurementId: "#",
 };
 
 const app = initializeApp(firebaseConfig);

@@ -1,6 +1,8 @@
-import React from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, Image, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
+import { getAuth } from 'firebase/auth';
+import { getFirestore, doc, setDoc, arrayUnion } from 'firebase/firestore';
 
 interface CardProps {
   imageSrc: string;
@@ -10,6 +12,41 @@ interface CardProps {
 }
 
 export default function Card({ imageSrc, name, description, price }: CardProps) {
+  const [isAdding, setIsAdding] = useState(false);
+
+  const handleAddToCart = async () => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+
+    if (!user) {
+      Alert.alert('Erro', 'Você precisa estar logado para adicionar ao carrinho.');
+      return;
+    }
+
+    setIsAdding(true);
+    const db = getFirestore();
+    const userCartRef = doc(db, 'carts', user.uid);
+
+    try {
+      await setDoc(userCartRef, {
+        items: arrayUnion({
+          name,
+          imageSrc,
+          price: parseFloat(price),
+          description,
+          quantity: 1,
+        }),
+      }, { merge: true });
+
+      Alert.alert('Sucesso', 'Item adicionado ao carrinho!');
+    } catch (error) {
+      console.error('Erro ao adicionar item ao carrinho: ', error);
+      Alert.alert('Erro', 'Não foi possível adicionar o item ao carrinho.');
+    } finally {
+      setIsAdding(false);
+    }
+  };
+
   return (
     <View style={styles.card}>
       <Image source={{ uri: imageSrc }} style={styles.image} />
@@ -20,7 +57,7 @@ export default function Card({ imageSrc, name, description, price }: CardProps) 
           <Text style={styles.price}>R${price}</Text>
         </View>
       </View>
-      <TouchableOpacity style={styles.icon}>
+      <TouchableOpacity style={styles.icon} onPress={handleAddToCart} disabled={isAdding}>
         <AntDesign name="shoppingcart" size={24} color="white" />
       </TouchableOpacity>
     </View>
@@ -55,7 +92,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: 'gray',
     marginTop: -5,
-    paddingRight: 20
+    paddingRight: 20,
   },
   priceContainer: {
     alignItems: 'flex-start',

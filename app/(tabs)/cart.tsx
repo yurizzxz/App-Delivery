@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -12,6 +12,8 @@ import Constants from "expo-constants";
 import { AntDesign } from "@expo/vector-icons";
 import Button from "../_components/Button";
 import Header from "../_components/Header";
+import { getAuth } from "firebase/auth";
+import { getFirestore, doc, onSnapshot, updateDoc, arrayRemove, arrayUnion, setDoc } from "firebase/firestore";
 
 const statusBarHeight: number = Constants.statusBarHeight;
 
@@ -22,70 +24,167 @@ type CartItem = {
   description: string;
   price: number;
   quantity: number;
-  image: string;
+  imageSrc: string;
 };
 
 export default function CartScreen() {
-  const [cartItems, setCartItems] = useState<CartItem[]>([
-    {
-      id: "1",
-      number: 22,
-      name: "Pizza Margherita",
-      description: "Delicioso sanduíche de frango com queijo",
-      price: 30,
-      quantity: 1,
-      image: "https://via.placeholder.com/80",
-    },
-    {
-      id: "2",
-      number: 22,
-      name: "Hambúrguer",
-      description: "Delicioso sanduíche de frango com queijo",
-      price: 20,
-      quantity: 2,
-      image: "https://via.placeholder.com/80",
-    },
-    {
-      id: "3",
-      number: 22,
-      name: "Coca-Cola 1L",
-      description: "Delicioso sanduíche de frango com queijo",
-      price: 10,
-      quantity: 1,
-      image: "https://via.placeholder.com/80",
-    },
-  ]);
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const handleRemoveItem = (id: string) => {
-    setCartItems(cartItems.filter((item) => item.id !== id));
+  useEffect(() => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+  
+    if (!user) {
+      console.error("Usuário não está autenticado.");
+      setLoading(false);
+      return;
+    }
+  
+    const db = getFirestore();
+    const userCartRef = doc(db, "carts", user.uid);
+  
+    const unsubscribe = onSnapshot(userCartRef, (snapshot) => {
+      if (snapshot.exists()) {
+        const cartData = snapshot.data();
+        setCartItems(cartData?.items || []);
+      } else {
+        console.warn("Nenhum prouduto adicionado ao carrinho.");
+      }
+      setLoading(false);
+    });
+  
+    return () => unsubscribe();
+  }, []);
+  
+
+  const handleRemoveItem = async (id: string) => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+
+    if (user) {
+      const db = getFirestore();
+      const userCartRef = doc(db, "carts", user.uid);
+
+      const itemToRemove = cartItems.find((item) => item.id === id);
+      if (itemToRemove) {
+        await updateDoc(userCartRef, {
+          items: arrayRemove(itemToRemove),
+        });
+      }
+    }
   };
 
-  const handleIncreaseQuantity = (id: string) => {
-    setCartItems(
-      cartItems.map((item) =>
-        item.id === id ? { ...item, quantity: item.quantity + 1 } : item
-      )
+  const handleIncreaseQuantity = async (id: string) => {
+    const updatedCartItems = cartItems.map((item) =>
+      item.id === id ? { ...item, quantity: item.quantity + 1 } : item
     );
+    setCartItems(updatedCartItems);
+
+    const auth = getAuth();
+    const user = auth.currentUser;
+
+    if (user) {
+      const db = getFirestore();
+      const userCartRef = doc(db, "carts", user.uid);
+
+      const itemToUpdate = updatedCartItems.find((item) => item.id === id);
+      if (itemToUpdate) {
+        await updateDoc(userCartRef, {
+          items: arrayRemove(cartItems.find((item) => item.id === id)),
+        });
+
+        await updateDoc(userCartRef, {
+          items: arrayUnion(itemToUpdate),
+        });
+      }
+    }
   };
 
-  const handleDecreaseQuantity = (id: string) => {
-    setCartItems(
-      cartItems.map((item) =>
-        item.id === id && item.quantity > 1
-          ? { ...item, quantity: item.quantity - 1 }
-          : item
-      )
-    );
+  const handleDecreaseQuantity = async (id: string) => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+  
+    if (!user) return;
+  
+    const db = getFirestore();
+    const userCartRef = doc(db, "carts", user.uid);
+  
+    const itemToUpdate = cartItems.find((item) => item.id === id);
+  
+    if (!itemToUpdate) return;
+  
+    if (itemToUpdate.quantity > 1) {
+      const updatedCartItems = cartItems.map((item) =>
+        item.id === id ? { ...item, quantity: item.quantity - 1 } : item
+      );
+      setCartItems(updatedCartItems);
+  
+      await updateDoc(userCartRef, {
+        items: arrayRemove(itemToUpdate),
+      });
+  
+      await updateDoc(userCartRef, {
+        items: arrayUnion({ ...itemToUpdate, quantity: itemToUpdate.quantity - 1 }),
+      });
+    } else {
+      const updatedCartItems = cartItems.filter((item) => item.id !== id);
+      setCartItems(updatedCartItems);
+  
+      await updateDoc(userCartRef, {
+        items: arrayRemove(itemToUpdate),
+      });
+    }
   };
+
+  const handleCheckout = async () => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+  
+    if (!user) {
+      console.error("Usuário não autenticado.");
+      return;
+    }
+  
+    const db = getFirestore();
+    const userCartRef = doc(db, "carts", user.uid); // Referência do carrinho
+    const orderId = `${user.uid}-${new Date().getTime()}`; // Gerando um ID único com timestamp
+    const ordersRef = doc(db, "pedidos", orderId); // Criando o novo documento na coleção "pedidos"
+  
+    try {
+      // Criando o pedido
+      await setDoc(ordersRef, {
+        userId: user.uid,
+        items: cartItems,
+        totalAmount: totalAmount,
+        orderDate: new Date(),
+      });
+  
+      // Limpar os itens do carrinho após a compra
+      await updateDoc(userCartRef, {
+        items: [], // Limpar carrinho
+      });
+  
+      // Confirmação do sucesso
+      alert("Pedido efetuado com sucesso!");
+  
+      // Limpar o estado do carrinho na tela
+      setCartItems([]);
+    } catch (error) {
+      console.error("Erro ao finalizar a compra: ", error);
+      alert("Houve um erro ao processar o pedido.");
+    }
+  };
+  
 
   const renderItem = ({ item }: { item: CartItem }) => (
     <View style={styles.cartItem}>
-      <Image source={{ uri: item.image }} style={styles.itemImage} />
+      <Image source={{ uri: item.imageSrc }} style={styles.itemImage} />
       <View style={styles.itemDetails}>
         <Text style={styles.itemName}>
           <Text style={{ color: "#ff0000" }}>{item.number}</Text> {item.name}
         </Text>
-        <Text style={styles.itemDescription}>R$ {item.description}</Text>
+        <Text style={styles.itemDescription}>{item.description}</Text>
         <Text style={styles.itemPrice}>R$ {item.price}</Text>
         <View style={styles.quantityContainer}>
           <TouchableOpacity
@@ -112,31 +211,39 @@ export default function CartScreen() {
     </View>
   );
 
+  const totalAmount: string = cartItems
+  .reduce((sum: number, item: CartItem): number => 
+    sum + parseFloat(item.price as unknown as string) * item.quantity, 
+    0
+  )
+  .toFixed(2);
+
+
   return (
     <View style={{ flex: 1, backgroundColor: "#f5f5f5" }}>
       <ScrollView
-        style={[
-          styles.container,
-          { marginTop: statusBarHeight },
-        ]}
+        style={[styles.container, { marginTop: statusBarHeight }]}
         contentContainerStyle={{ flexGrow: 1 }}
       >
         <Header title="Carrinho" />
 
-        <FlatList
-          data={cartItems}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id}
-          contentContainerStyle={styles.cartList}
-        />
+        {loading ? (
+          <Text style={{ textAlign: "center", marginTop: 20 }}>Carregando...</Text>
+        ) : (
+          <FlatList
+            data={cartItems}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.id}
+            contentContainerStyle={styles.cartList}
+          />
+        )}
       </ScrollView>
 
       <View style={styles.totalContainer}>
         <Text style={styles.totalText}>
-          Total a pagar: R${" "}
-          {cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0)}
+          Total a pagar: R$ {totalAmount}
         </Text>
-        <Button onPress={() => {}} title="Finalizar compra" />
+        <Button onPress={handleCheckout} title="Finalizar compra" />
       </View>
     </View>
   );
@@ -146,12 +253,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 15,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "#000",
-    marginBottom: 20,
   },
   cartList: {
     paddingBottom: 20,
@@ -224,16 +325,5 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#000",
     marginBottom: 10,
-  },
-  checkoutButton: {
-    backgroundColor: "#ff0000",
-    paddingVertical: 15,
-    borderRadius: 5,
-    alignItems: "center",
-  },
-  checkoutButtonText: {
-    fontSize: 16,
-    color: "#fff",
-    fontWeight: "bold",
   },
 });
