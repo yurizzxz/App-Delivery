@@ -1,57 +1,41 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity, ActivityIndicator } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { AntDesign } from "@expo/vector-icons";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { fetchCards } from "../services/firebaseConfig"; 
 import Button from "../_components/Button";
 
 type CardType = {
   id: string;
-  number: number;
-  imageSrc?: string;
+  imageSrc: string;
   name: string;
   description: string;
   price: string;
 };
 
-const cards: CardType[] = [
-  {
-    id: "1",
-    number: 22,
-    imageSrc: "https://via.placeholder.com/300",
-    name: "X Burguer",
-    description: "Pão, 2 hambúrgueres, bacon, cheddar e queijo",
-    price: "25,00",
-  },
-  {
-    id: "2",
-    number: 10,
-    imageSrc: "https://via.placeholder.com/300",
-    name: "Refrigerante",
-    description: "Refrigerante de cola gelado",
-    price: "1,99",
-  },
-  {
-    id: "3",
-    number: 70,
-    imageSrc: "https://via.placeholder.com/300",
-    name: "Batata Frita",
-    description: "Batata frita crocante",
-    price: "4,99",
-  },
-];
-
 export default function FoodDetailScreen() {
   const { id } = useLocalSearchParams();
   const router = useRouter();
-
-  const item = cards.find((card) => card.id === id);
-
+  const [item, setItem] = useState<CardType | null>(null); 
+  const [isFavorite, setIsFavorite] = useState(false);
   const [quantity, setQuantity] = useState(1);
+
+  useEffect(() => {
+    const loadItem = async () => {
+      const fetchedCards = await fetchCards();
+      const selectedItem = fetchedCards.find((card) => card.id === id);  
+      setItem(selectedItem || null); 
+    };
+
+    if (id) {
+      loadItem();
+    }
+  }, [id]); 
 
   if (!item) {
     return (
-      <View style={styles.container}>
-        <Text>Item não encontrado</Text>
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size="large" color="#000"></ActivityIndicator>
       </View>
     );
   }
@@ -65,17 +49,24 @@ export default function FoodDetailScreen() {
       <Image source={{ uri: item.imageSrc }} style={styles.image} />
 
       <View style={styles.detailsContainer}>
-        <Text style={styles.title}>
-          <Text style={styles.id}>{item.number} - </Text>
-          {item.name}
-        </Text>
+        <View style={styles.titleContainer}>
+          <Text style={styles.title}>
+            {item.name}
+          </Text>
+          <TouchableOpacity onPress={() => setIsFavorite(!isFavorite)}>
+            <AntDesign
+              name={isFavorite ? "heart" : "hearto"}
+              size={24}
+              color={isFavorite ? "#ff0000" : "#000"}
+            />
+          </TouchableOpacity>
+        </View>
         <Text style={styles.description}>{item.description}</Text>
       </View>
 
       <View style={{ padding: 15, borderTopWidth: 1, borderTopColor: "#ddd" }}>
         <View style={styles.footerContainer}>
           <View>
-            
             <Text style={styles.label}>Valor:</Text>
             <View style={styles.quantityContainer}>
               <TouchableOpacity
@@ -129,14 +120,16 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 20,
     padding: 15,
   },
+  titleContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
   title: {
     fontSize: 28,
     fontWeight: "bold",
     color: "#000",
     marginBottom: 5,
-  },
-  id: {
-    color: "red",
   },
   description: {
     fontSize: 18,
@@ -147,7 +140,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingVertical: 15,
+    paddingBottom: 20,
+    paddingTop: 5,
   },
   quantityContainer: {
     flexDirection: "row",

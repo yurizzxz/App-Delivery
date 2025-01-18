@@ -1,16 +1,11 @@
-import {
-  Image,
-  StyleSheet,
-  View,
-  Text,
-  ScrollView,
-  Pressable,
-} from "react-native";
+import { Image, StyleSheet, View, Text, ScrollView, Pressable } from "react-native";
 import Constants from "expo-constants";
 import Greeting from "../_components/Greeting";
 import Card from "../_components/Card";
 import SearchInput from "../_components/Search";
 import { useRouter } from "expo-router";
+import { useState, useEffect } from "react";
+import { fetchCards } from "../services/firebaseConfig"
 
 const statusBarHeight: number = Constants.statusBarHeight;
 
@@ -46,32 +41,18 @@ type CardType = {
   price: string;
 };
 
-const cards: CardType[] = [
-  {
-    id: "1",
-    imageSrc: "https://via.placeholder.com/300",
-    name: "Sanduíche de Frango",
-    description: "Delicioso sanduíche de frango com queijo",
-    price: "9,99",
-  },
-  {
-    id: "2",
-    imageSrc: "https://via.placeholder.com/300",
-    name: "Refrigerante",
-    description: "Refrigerante de cola gelado",
-    price: "1,99",
-  },
-  {
-    id: "3",
-    imageSrc: "https://via.placeholder.com/300",
-    name: "Batata Frita",
-    description: "Batata frita crocante",
-    price: "4,99",
-  },
-];
-
 export default function HomeScreen() {
+  const [cards, setCards] = useState<CardType[]>([]);
   const router = useRouter();
+
+  useEffect(() => {
+    const loadCards = async () => {
+      const fetchedCards = await fetchCards();
+      setCards(fetchedCards); 
+    };
+
+    loadCards();
+  }, []);
 
   return (
     <ScrollView
@@ -90,6 +71,8 @@ export default function HomeScreen() {
       {/* Search */}
       <SearchInput placeholder="O que você procura?" onChangeText={() => {}} />
 
+
+      {/* Categorias */}
       <View style={styles.categoryContainer}>
         <View style={styles.categoryItems}>
           {categories.map((category, index) => (
@@ -119,7 +102,7 @@ export default function HomeScreen() {
               <Pressable
                 key={card.id}
                 style={styles.cardItem}
-                onPress={() => router.push(`../foods/${card.id}`)}
+                onPress={() => router.push(`./foods/${card.id}`)}
               >
                 <Card
                   imageSrc={card.imageSrc}

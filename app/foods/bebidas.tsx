@@ -1,22 +1,43 @@
-import React from "react";
-import { View, Text, ScrollView, StyleSheet } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, ScrollView, StyleSheet, ActivityIndicator } from "react-native";
 import Card from "@/app/_components/Card";
 import Header from "@/app/_components/Header";
 import Constants from "expo-constants";
 import { useRouter } from "expo-router";
 import { AntDesign } from "@expo/vector-icons";
+import { fetchCards } from "../services/firebaseConfig";
 
 const statusBarHeight: number = Constants.statusBarHeight;
 
+interface CardType {
+  id: string;
+  imageSrc: string;
+  name: string;
+  description: string;
+  price: string;
+  category: string;
+}
+
 export default function BebidasScreen() {
   const router = useRouter();
+  const [cards, setCards] = useState<CardType[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    const getCards = async () => {
+      const fetchedCards = await fetchCards();
+      setCards(fetchedCards.filter(card => card.category === "bebida"));
+      setLoading(false);
+    };
+    getCards();
+  }, []);
 
   return (
     <ScrollView style={[styles.container, { marginTop: statusBarHeight }]}>
       <View style={styles.header}>
         <AntDesign
           name="arrowleft"
-          onPress={() => router.back()} 
+          onPress={() => router.back()}
           size={24}
           color="#000"
           style={styles.arrowIcon}
@@ -24,26 +45,21 @@ export default function BebidasScreen() {
         <Header title="Bebidas" />
       </View>
 
-      <View style={styles.cardContainer}>
-        <Card
-          imageSrc="https://via.placeholder.com/300"
-          name="Sanduíche de Frango"
-          description="Delicioso sanduíche de frango com queijo"
-          price="$9,99"
-        />
-        <Card
-          imageSrc="https://via.placeholder.com/300"
-          name="Hamburguer"
-          description="Hamburguer com queijo e bacon"
-          price="$8,99"
-        />
-        <Card
-          imageSrc="https://via.placeholder.com/300"
-          name="Croissant de Carne"
-          description="Croissant recheado de carne"
-          price="$6,49"
-        />
-      </View>
+      {loading ? (
+        <ActivityIndicator size="large" color="#000" />
+      ) : (
+        <View style={styles.cardContainer}>
+          {cards.map((card) => (
+            <Card
+              key={card.id}
+              imageSrc={card.imageSrc}
+              name={card.name}
+              description={card.description}
+              price={card.price}
+            />
+          ))}
+        </View>
+      )}
     </ScrollView>
   );
 }
@@ -54,20 +70,16 @@ const styles = StyleSheet.create({
     backgroundColor: "#f5f5f5",
     padding: 10,
   },
-
   header: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "flex-start", 
+    justifyContent: "flex-start",
     marginBottom: 10,
   },
-
   arrowIcon: {
-    marginRight: 20, 
-    marginTop: 5
+    marginRight: 20,
+    marginTop: 5,
   },
-
-
   cardContainer: {
     gap: 15,
     flexDirection: "row",
