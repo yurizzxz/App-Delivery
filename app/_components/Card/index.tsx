@@ -17,7 +17,7 @@ export default function Card({ imageSrc, name, description, price }: CardProps) 
         <Text style={styles.name}>{name}</Text>
         <Text style={styles.description}>{description}</Text>
         <View style={styles.priceContainer}>
-          <Text style={styles.price}>{price}</Text>
+          <Text style={styles.price}>R${price}</Text>
         </View>
       </View>
       <TouchableOpacity style={styles.icon}>

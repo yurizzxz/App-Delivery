@@ -38,6 +38,38 @@ const categories: Category[] = [
   },
 ];
 
+type CardType = {
+  id: string;
+  imageSrc: string;
+  name: string;
+  description: string;
+  price: string;
+};
+
+const cards: CardType[] = [
+  {
+    id: "1",
+    imageSrc: "https://via.placeholder.com/300",
+    name: "Sanduíche de Frango",
+    description: "Delicioso sanduíche de frango com queijo",
+    price: "9,99",
+  },
+  {
+    id: "2",
+    imageSrc: "https://via.placeholder.com/300",
+    name: "Refrigerante",
+    description: "Refrigerante de cola gelado",
+    price: "1,99",
+  },
+  {
+    id: "3",
+    imageSrc: "https://via.placeholder.com/300",
+    name: "Batata Frita",
+    description: "Batata frita crocante",
+    price: "4,99",
+  },
+];
+
 export default function HomeScreen() {
   const router = useRouter();
 
@@ -79,59 +111,24 @@ export default function HomeScreen() {
       {/* Cards */}
       <View style={styles.cards}>
         <View>
-          <Text style={{ fontSize: 23, fontWeight: "bold" }}>
-            Mais Vendidos
-          </Text>
+          <Text style={{ fontSize: 23, fontWeight: "bold" }}>Mais Vendidos</Text>
         </View>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           <View style={styles.cardContainer}>
-            <Card
-              imageSrc="https://via.placeholder.com/300"
-              name="Sanduíche de Frango"
-              description="Delicioso sanduíche de frango com queijo"
-              price="$9,99"
-            />
-            <Card
-              imageSrc="https://via.placeholder.com/300"
-              name="Refrigerante"
-              description="Refrigerante de cola gelado"
-              price="$1,99"
-            />
-            <Card
-              imageSrc="https://via.placeholder.com/300"
-              name="Batata Frita"
-              description="Batata frita crocante"
-              price="$4,99"
-            />
-          </View>
-        </ScrollView>
-      </View>
-      <View style={styles.cards}>
-        <View>
-          <Text style={{ fontSize: 23, fontWeight: "bold" }}>
-            Mais Vendidos
-          </Text>
-        </View>
-        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-          <View style={styles.cardContainer}>
-            <Card
-              imageSrc="https://via.placeholder.com/300"
-              name="Sanduíche de Frango"
-              description="Delicioso sanduíche de frango com queijo"
-              price="$9,99"
-            />
-            <Card
-              imageSrc="https://via.placeholder.com/300"
-              name="Refrigerante"
-              description="Refrigerante de cola gelado"
-              price="$1,99"
-            />
-            <Card
-              imageSrc="https://via.placeholder.com/300"
-              name="Batata Frita"
-              description="Batata frita crocante"
-              price="$4,99"
-            />
+            {cards.map((card) => (
+              <Pressable
+                key={card.id}
+                style={styles.cardItem}
+                onPress={() => router.push(`../foods/${card.id}`)}
+              >
+                <Card
+                  imageSrc={card.imageSrc}
+                  name={card.name}
+                  description={card.description}
+                  price={card.price}
+                />
+              </Pressable>
+            ))}
           </View>
         </ScrollView>
       </View>
@@ -147,7 +144,6 @@ const styles = StyleSheet.create({
   },
 
   // cat
-
   categoryContainer: {
     padding: 10,
   },
@@ -176,7 +172,6 @@ const styles = StyleSheet.create({
   },
 
   //cards
-
   cards: {
     gap: 10,
     padding: 10,
@@ -184,5 +179,8 @@ const styles = StyleSheet.create({
   cardContainer: {
     flexDirection: "row",
     gap: 10,
+  },
+  cardItem: {
+    borderRadius: 10,
   },
 });
