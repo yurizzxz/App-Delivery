@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, TextInput, Image } from "react-native";
+import { View, Text, StyleSheet, TextInput, Image, TouchableOpacity } from "react-native";
 import Constants from "expo-constants";
 import { useLocalSearchParams } from "expo-router";
 import { getFirestore, doc, onSnapshot, updateDoc } from "firebase/firestore";
-import { getAuth, updateEmail, updatePassword } from "firebase/auth";
+import { getAuth, updateEmail, updatePassword, signOut } from "firebase/auth";
 import Button from "../_components/Button";
 import Header from "../_components/Header";
 import { useRouter } from "expo-router";
@@ -23,6 +23,8 @@ export default function ProfileDetails() {
   const [newEmail, setNewEmail] = useState<string>("");
   const [newPassword, setNewPassword] = useState<string>("");
   const [newName, setNewName] = useState<string>("");
+  const [profilePhoto, setProfilePhoto] = useState<string | null>(null);
+
   const auth = getAuth();
   const router = useRouter();
 
@@ -38,6 +40,7 @@ export default function ProfileDetails() {
             setUserEmail(docSnap.data().email);
             setNewName(docSnap.data().name);
             setNewEmail(docSnap.data().email);
+            setProfilePhoto(docSnap.data().photo);
           }
         });
 
@@ -71,7 +74,20 @@ export default function ProfileDetails() {
       if (newPassword) {
         await updatePassword(user, newPassword);
       }
+
+      if (profilePhoto) {
+        const db = getFirestore();
+        const userDocRef = doc(db, "users", id);
+        await updateDoc(userDocRef, {
+          photo: profilePhoto,
+        });
+      }
     }
+  };
+
+  const handlePhotoPick = () => {
+
+    setProfilePhoto("dummy-photo-url"); 
   };
 
   return (
@@ -87,7 +103,16 @@ export default function ProfileDetails() {
         <Header title="Editar informações" />
       </View>
 
-      <View style={{ gap: 10, justifyContent: "center", flex: 1 }}>
+      <View style={{ gap: 10, justifyContent: "center", paddingBottom: 150, flex: 1 }}>
+        <View style={styles.profilePhotoContainer}>
+          <TouchableOpacity onPress={handlePhotoPick} style={styles.photoPickerButton}>
+            {profilePhoto ? (
+              <Image source={{ uri: profilePhoto }} style={styles.profilePhoto} />
+            ) : (
+              <AntDesign name="camera" size={40} color="#ccc" />
+            )}
+          </TouchableOpacity>
+        </View>
         <TextInput
           style={styles.input}
           placeholder="Novo nome"
@@ -108,12 +133,6 @@ export default function ProfileDetails() {
           onChangeText={setNewPassword}
         />
         <Button title="Atualizar" onPress={handleUpdateProfile} />
-        <View style={{ alignItems: "center" }}>
-          <Image
-            source={require("@/assets/images/andree.png")}
-            style={{ width: 100, height: 100, resizeMode: "contain" }}
-          />
-        </View>
       </View>
     </View>
   );
@@ -125,19 +144,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#F5F5F5",
     padding: 15,
   },
-  username: {
-    fontSize: 22,
-    fontWeight: "bold",
-    color: "#000",
-    marginBottom: 10,
-  },
-  input: {
-    height: 60,
-    backgroundColor: "#ECECEC",
-    paddingHorizontal: 30,
-    borderRadius: 5,
-    fontSize: 17,
-  },
   header: {
     flexDirection: "row",
     alignItems: "center",
@@ -147,5 +153,30 @@ const styles = StyleSheet.create({
   arrowIcon: {
     marginRight: 20,
     marginTop: 5,
+  },
+  profilePhotoContainer: {
+    alignItems: "center",
+    marginBottom: 15,
+  },
+  photoPickerButton: {
+    backgroundColor: "#ECECEC",
+    borderRadius: 100,
+    padding: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    width: 150,
+    height: 150,
+  },
+  profilePhoto: {
+    width: "100%",
+    height: "100%",
+
+  },
+  input: {
+    height: 60,
+    backgroundColor: "#ECECEC",
+    paddingHorizontal: 30,
+    borderRadius: 5,
+    fontSize: 17,
   },
 });

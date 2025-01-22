@@ -12,8 +12,9 @@ import Button from "../_components/Button";
 import Constants from "expo-constants";
 import Header from "../_components/Header";
 import { useRouter } from "expo-router";
+import { AntDesign } from "@expo/vector-icons";
 
-import { getAuth } from "firebase/auth";
+import { getAuth, signOut} from "firebase/auth";
 import { getFirestore, doc, getDoc } from "firebase/firestore";
 
 const statusBarHeight: number = Constants.statusBarHeight;
@@ -30,7 +31,7 @@ export default function Profile() {
       if (user) {
         setUserId(user.uid);
         const db = getFirestore();
-        
+
         const userDocRef = doc(db, "users", user.uid);
         const userDoc = await getDoc(userDocRef);
         if (userDoc.exists()) {
@@ -43,9 +44,16 @@ export default function Profile() {
     getUserData();
   }, []);
 
+  const handleLogout = async () => {
+    try {
+      await signOut(getAuth());
+      router.replace("/login");
+    } catch (error) {
+      console.error("Erro ao fazer logout:", error);
+    }
+  };
   const router = useRouter();
-  
-  
+
   return (
     <View style={[styles.container, { marginTop: statusBarHeight }]}>
       <Header title="Perfil" />
@@ -56,42 +64,72 @@ export default function Profile() {
 
           <Text style={styles.email}>{userEmail}</Text>
           <Button
-            onPress={() =>
-              userId && router.push(`../profile/${userId}`) 
-            }
+            onPress={() => userId && router.push(`../profile/${userId}`)}
             title="Editar informações"
           />
         </View>
       </View>
 
       <View
-        style={{ height: 1, backgroundColor: "#1e1e1e1d", marginTop: 20, marginBottom: 40 }}
+        style={{
+          height: 1,
+          backgroundColor: "#1e1e1e1d",
+          marginTop: 20,
+          marginBottom: 20,
+        }}
       ></View>
 
-      {/* Options */}
-      <View>
+      <View
+        style={{
+          flexDirection: "column",
+          gap: 5,
+        }}
+      >
         <TouchableOpacity
           onPress={() => router.push("../profile/pedidos")}
           style={styles.optionButton}
         >
-          <Text style={styles.optionText}>Histórico de pedidos</Text>
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 15 }}>
+            <AntDesign name="clockcircle" style={{ zIndex: 1}} size={20} color="#000" />
+            <Text style={styles.optionText}>Histórico de pedidos</Text>
+          </View>
         </TouchableOpacity>
-        <View style={styles.favoritesContainer}>
-          <TouchableOpacity
-            onPress={() => router.push("../profile/pizzasfav")}
-            style={styles.favoriteButton}
-          >
-            <Text style={styles.favoriteText}>Pizzas Favoritas</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => router.push("../profile/lanchesfav")}
-            style={styles.favoriteButton}
-          >
-            <Text style={styles.favoriteText}>Lanches Favoritos</Text>
-          </TouchableOpacity>
-        </View>
-        <TouchableOpacity style={styles.whatsappButton}>
-          <Text style={styles.whatsappText}>Peça via WhatsApp</Text>
+
+        <TouchableOpacity
+          onPress={() => router.push("../profile/pizzasfav")}
+          style={styles.optionButton}
+        >
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 15 }}>
+            <AntDesign name="hearto" style={{ zIndex: 1}} size={20} color="#000" />
+            <Text style={styles.optionText}>Pizzas Favoritas</Text>
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={() => router.push("../profile/lanchesfav")}
+          style={styles.optionButton}
+        >
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 15 }}>
+            <AntDesign name="heart" style={{ zIndex: 1}} size={20} color="#000" />
+            <Text style={styles.optionText}>Lanches Favoritos</Text>
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={() => router.push("https://api.whatsapp.com/")}
+          style={styles.optionButton}
+        >
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 15 }}>
+            <AntDesign name="message1" style={{ zIndex: 1}} size={20} color="#000" />
+            <Text style={styles.optionText}>Peça via WhatsApp</Text>
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 15 }}>
+            <AntDesign name="logout" size={20}  color="#ff0000" />
+            <Text style={styles.logoutText}>Sair</Text>
+          </View>
         </TouchableOpacity>
       </View>
     </View>
@@ -121,7 +159,7 @@ const styles = StyleSheet.create({
     height: 120,
     borderRadius: 60,
     backgroundColor: "#ccc",
-    marginBottom: 10,
+    marginBottom: 0,
   },
   username: {
     fontSize: 22,
@@ -146,11 +184,11 @@ const styles = StyleSheet.create({
     color: "#ff0000",
   },
   optionButton: {
-    backgroundColor: "#ECECEC",
     borderRadius: 5,
-    paddingVertical: 15,
-    paddingHorizontal: 10,
-    marginBottom: 10,
+    paddingVertical: 25,
+    paddingHorizontal: 15,
+    borderBottomWidth: .5,
+    borderColor: "#1e1e1e2f",
   },
   optionText: {
     textAlign: "center",
@@ -163,25 +201,18 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     gap: 10,
   },
-  favoriteButton: {
-    flex: 1,
-    backgroundColor: "#ECECEC",
+
+
+  logoutButton: {
     borderRadius: 5,
-    paddingVertical: 15,
+    paddingVertical: 25,
+    paddingHorizontal: 15,
+    borderBottomWidth: .5,
+    borderColor: "#ff00002e",
   },
-  favoriteText: {
+  logoutText: {
     textAlign: "center",
     fontSize: 18,
-    color: "#000",
-  },
-  whatsappButton: {
-    backgroundColor: "#ECECEC",
-    borderRadius: 5,
-    paddingVertical: 15,
-  },
-  whatsappText: {
-    textAlign: "center",
-    fontSize: 18,
-    color: "#000",
+    color: "#ff0000",
   },
 });

@@ -46,9 +46,10 @@ const styles = StyleSheet.create({
     color: '#000',
   },
   title: {
-    fontSize: 32,
+    fontSize: 34,
     fontWeight: 'bold',
-    color: '#d30000'
+    color: '#ff0000',
+    lineHeight: 38,
   },
   profileIcon: {
     flexDirection: 'row',

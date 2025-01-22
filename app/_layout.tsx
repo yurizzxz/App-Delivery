@@ -1,8 +1,15 @@
 import React from "react";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import * as SplashScreen from 'expo-splash-screen';
+
+import "../global.css";
+
+SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
+
+
   return (
     <>
       <StatusBar backgroundColor="transparent" translucent />
@@ -20,11 +27,6 @@ export default function RootLayout() {
         <Stack.Screen name="_components/Greeting/index" />
         <Stack.Screen name="_components/Header/index" />
         <Stack.Screen name="_components/Search/index" />
-
-        <Stack.Screen name="checkout" />
-        <Stack.Screen name="checkout/index" />
-        <Stack.Screen name="checkout/payment" />
-        <Stack.Screen name="checkout/success" />
 
         <Stack.Screen name="foods/[id]" />
         <Stack.Screen name="foods/bebidas" />

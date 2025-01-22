@@ -1,12 +1,28 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity, ActivityIndicator, Alert } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  ActivityIndicator,
+  Alert,
+} from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { AntDesign } from "@expo/vector-icons";
 import { useState, useEffect } from "react";
 import { getAuth } from "firebase/auth";
-import { getFirestore, doc, setDoc, arrayUnion, updateDoc } from "firebase/firestore";
-import { fetchCards } from "../services/firebaseConfig"; 
+import {
+  getFirestore,
+  doc,
+  setDoc,
+  arrayUnion,
+  updateDoc,
+  getDoc,
+} from "firebase/firestore";
+import { fetchCards } from "../services/firebaseConfig";
 import Button from "../_components/Button";
 
+// Definição dos tipos
 type CardType = {
   id: string;
   imageSrc: string;
@@ -18,22 +34,81 @@ type CardType = {
 export default function FoodDetailScreen() {
   const { id } = useLocalSearchParams();
   const router = useRouter();
-  const [item, setItem] = useState<CardType | null>(null); 
-  const [isFavorite, setIsFavorite] = useState(false);
-  const [quantity, setQuantity] = useState(1);
+  const [item, setItem] = useState<CardType | null>(null);
+  const [isFavorite, setIsFavorite] = useState<boolean>(false);
+  const [quantity, setQuantity] = useState<number>(1);
+  const [isAdding, setIsAdding] = useState<boolean>(false);
 
   const auth = getAuth();
   const user = auth.currentUser;
 
+  // Função para adicionar ao carrinho
+  const handleAddToCart = async () => {
+    if (!user) {
+      Alert.alert(
+        "Erro",
+        "Você precisa estar logado para adicionar ao carrinho."
+      );
+      return;
+    }
+
+    setIsAdding(true);
+    const db = getFirestore();
+    const userCartRef = doc(db, "carts", user.uid);
+
+    try {
+      // Verificar se já existe um carrinho para o usuário
+      const userDoc = await getDoc(userCartRef);
+      if (userDoc.exists()) {
+        // Atualizar o carrinho existente com os novos itens
+        await updateDoc(userCartRef, {
+          items: arrayUnion({
+            name: item?.name,
+            imageSrc: item?.imageSrc,
+            price: item ? parseFloat(item.price) : 0,
+            description: item?.description,
+            quantity: quantity,
+          }),
+        });
+      } else {
+        // Criar um novo carrinho e adicionar o item
+        await setDoc(
+          userCartRef,
+          {
+            items: [
+              {
+                name: item?.name,
+                imageSrc: item?.imageSrc,
+                price: item ? parseFloat(item.price) : 0,
+                description: item?.description,
+                quantity: quantity,
+              },
+            ],
+          }
+        );
+      }
+
+      Alert.alert("Sucesso", "Item adicionado ao carrinho!");
+    } catch (error) {
+      console.error("Erro ao adicionar item ao carrinho: ", error);
+      Alert.alert("Erro", "Não foi possível adicionar o item ao carrinho.");
+    } finally {
+      setIsAdding(false);
+    }
+  };
+
+  // Função para adicionar aos favoritos
   const handleFavorite = async () => {
     if (!user) {
-      Alert.alert("Erro", "Você precisa estar logado para adicionar aos favoritos.");
+      Alert.alert(
+        "Erro",
+        "Você precisa estar logado para adicionar aos favoritos."
+      );
       return;
     }
 
     const db = getFirestore();
     const userRef = doc(db, "users", user.uid);
-    const userFavoritesRef = doc(db, "favorites", user.uid);
 
     try {
       await updateDoc(userRef, {
@@ -52,14 +127,14 @@ export default function FoodDetailScreen() {
   useEffect(() => {
     const loadItem = async () => {
       const fetchedCards = await fetchCards();
-      const selectedItem = fetchedCards.find((card) => card.id === id);  
-      setItem(selectedItem || null); 
+      const selectedItem = fetchedCards.find((card) => card.id === id);
+      setItem(selectedItem || null);
     };
 
     if (id) {
       loadItem();
     }
-  }, [id]); 
+  }, [id]);
 
   if (!item) {
     return (
@@ -79,9 +154,7 @@ export default function FoodDetailScreen() {
 
       <View style={styles.detailsContainer}>
         <View style={styles.titleContainer}>
-          <Text style={styles.title}>
-            {item.name}
-          </Text>
+          <Text style={styles.title}>{item.name}</Text>
           <TouchableOpacity onPress={handleFavorite}>
             <AntDesign
               name={isFavorite ? "heart" : "hearto"}
@@ -119,7 +192,7 @@ export default function FoodDetailScreen() {
           </View>
         </View>
         <View>
-          <Button title="Adicionar ao carrinho" onPress={() => {}} />
+          <Button title="Adicionar ao carrinho" onPress={handleAddToCart} />
         </View>
       </View>
     </View>
@@ -148,7 +221,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     paddingHorizontal: 15,
-    paddingTop: 20
+    paddingTop: 20,
   },
   titleContainer: {
     flexDirection: "row",

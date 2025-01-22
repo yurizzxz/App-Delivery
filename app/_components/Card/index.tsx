@@ -58,7 +58,7 @@ export default function Card({ imageSrc, name, description, price }: CardProps) 
         </View>
       </View>
       <TouchableOpacity style={styles.icon} onPress={handleAddToCart} disabled={isAdding}>
-        <AntDesign name="shoppingcart" size={24} color="white" />
+        <AntDesign name="shoppingcart" size={24} color="white" style={{ right: 1 }} />
       </TouchableOpacity>
     </View>
   );
