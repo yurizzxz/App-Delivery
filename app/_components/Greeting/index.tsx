@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, Image, TouchableOpacity } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 
 interface HeaderProps {
@@ -11,16 +11,16 @@ interface HeaderProps {
 
 export default function Greeting({ title, onProfilePress, profileImageUri, greeting }: HeaderProps) {
   return (
-    <View style={styles.header}>
-      <View style={styles.leftContent}>
-        <Text style={styles.greeting}>{greeting}</Text>
-        <Text style={styles.title}>{title}</Text>
+    <View className="flex-row justify-between items-center p-2.5">
+      <View className="flex-col justify-center">
+        <Text className="text-2xl text-black font-bold">{greeting}</Text>
+        <Text className="text-4xl font-bold text-red-600 leading-9'">{title}</Text>
       </View>
-      <TouchableOpacity style={styles.profileIcon} onPress={onProfilePress}>
+      <TouchableOpacity className="flex-row items-center" onPress={onProfilePress}>
         {profileImageUri ? (
           <Image 
             source={{ uri: profileImageUri }} 
-            style={styles.profileImage} 
+            className="w-9 h-9 rounded-full" 
           />
         ) : (
           <AntDesign name="user" size={24} color="gray" />
@@ -29,35 +29,3 @@ export default function Greeting({ title, onProfilePress, profileImageUri, greet
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 10,
-  },
-  leftContent: {
-    flexDirection: 'column',
-    justifyContent: 'center',
-  },
-  greeting: {
-    fontSize: 24,
-    color: '#000',
-  },
-  title: {
-    fontSize: 34,
-    fontWeight: 'bold',
-    color: '#ff0000',
-    lineHeight: 38,
-  },
-  profileIcon: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  profileImage: {
-    width: 35,
-    height: 35,
-    borderRadius: 50,
-  },
-});

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, ScrollView, StyleSheet, ActivityIndicator } from "react-native";
+import { View, ScrollView, ActivityIndicator } from "react-native";
 import Card from "@/app/_components/Card";
 import Header from "@/app/_components/Header";
 import Constants from "expo-constants";
@@ -33,14 +33,14 @@ export default function BebidasScreen() {
   }, []);
 
   return (
-    <ScrollView style={[styles.container, { marginTop: statusBarHeight }]}>
-      <View style={styles.header}>
+    <ScrollView className="flex-1 bg-gray-100 p-2.5" style={{ marginTop: statusBarHeight }}>
+      <View className="flex-row items-center justify-start mb-4">
         <AntDesign
           name="arrowleft"
           onPress={() => router.back()}
           size={24}
           color="#000"
-          style={styles.arrowIcon}
+          className="mr-5 mt-1"
         />
         <Header title="Bebidas" />
       </View>
@@ -48,7 +48,7 @@ export default function BebidasScreen() {
       {loading ? (
         <ActivityIndicator size="large" color="#000" />
       ) : (
-        <View style={styles.cardContainer}>
+        <View className="gap-4 flex-row flex-wrap">
           {cards.map((card) => (
             <Card
               key={card.id}
@@ -63,26 +63,3 @@ export default function BebidasScreen() {
     </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#f5f5f5",
-    padding: 10,
-  },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "flex-start",
-    marginBottom: 10,
-  },
-  arrowIcon: {
-    marginRight: 20,
-    marginTop: 5,
-  },
-  cardContainer: {
-    gap: 15,
-    flexDirection: "row",
-    flexWrap: "wrap",
-  },
-});

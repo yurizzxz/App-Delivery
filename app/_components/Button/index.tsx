@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { TouchableOpacity, Text } from 'react-native';
 
 interface ButtonProps {
   onPress: () => void;
@@ -10,31 +10,13 @@ interface ButtonProps {
 export default function Button({ onPress, title, disabled = false }: ButtonProps) {
   return (
     <TouchableOpacity 
-      style={[styles.button, disabled && styles.disabledButton]} 
       onPress={onPress} 
-      disabled={disabled}
+      disabled={disabled} 
+      className={`px-5 py-5 rounded-lg ${disabled ? 'bg-gray-500' : 'bg-[#ff0000]'} items-center justify-center`}
     >
-      <Text style={styles.text}>{title}</Text>
+      <Text className="text-white text-lg font-bold">{title}</Text>
     </TouchableOpacity>
   );
 }
 
-const styles = StyleSheet.create({
-  button: {
-    backgroundColor: '#ff0000',
-    paddingVertical: 15,
-    paddingHorizontal: 20,
-    borderRadius: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
 
-  },
-  disabledButton: {
-    backgroundColor: 'gray',
-  },
-  text: {
-    color: 'white',
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-});

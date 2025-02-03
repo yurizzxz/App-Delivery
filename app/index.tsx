@@ -25,7 +25,7 @@ export default function BeginScreen() {
       <Button title="Entre Agora" onPress={handleNavigateToLogin} />
 
       <TouchableOpacity style={{ alignItems: "center", marginTop: 20 }} onPress={handleNavigateToRegister}>
-        <Text style={{ fontSize: 20 }}>
+        <Text style={{ fontSize: 17, fontWeight: "bold" }}>
           Não possui uma conta?<Text style={{ color: "#ff0000" }}> Crie já</Text>
         </Text>
       </TouchableOpacity>

@@ -1,11 +1,4 @@
-import {
-  Image,
-  StyleSheet,
-  View,
-  Text,
-  ScrollView,
-  Pressable,
-} from "react-native";
+import { Image, View, Text, ScrollView, Pressable } from "react-native";
 import Constants from "expo-constants";
 import Greeting from "../_components/Greeting";
 import Card from "../_components/Card";
@@ -14,7 +7,7 @@ import { useRouter } from "expo-router";
 import { useState, useEffect } from "react";
 import { fetchCards } from "../services/firebaseConfig";
 import { getAuth } from "firebase/auth";
-import { getFirestore, doc, getDoc, onSnapshot } from "firebase/firestore";
+import { getFirestore, doc, onSnapshot } from "firebase/firestore";
 
 const statusBarHeight: number = Constants.statusBarHeight;
 
@@ -88,8 +81,8 @@ export default function HomeScreen() {
   return (
     <ScrollView
       contentContainerStyle={[
-        styles.container,
-        { marginTop: statusBarHeight, paddingTop: 20, paddingBottom: 40 },
+       ,
+        { marginTop: statusBarHeight, paddingTop: 20, paddingBottom: 40, paddingVertical: 10 },
       ]}
     >
       <Greeting
@@ -102,37 +95,37 @@ export default function HomeScreen() {
       <SearchInput placeholder="O que você procura?" onChangeText={() => {}} />
 
       {/* Categorias */}
-      <View style={styles.categoryContainer}>
-        <View style={styles.categoryItems}>
+      <View className="p-3">
+        <View className="flex-row gap-2">
           {categories.map((category, index) => (
             <Pressable
               key={index}
-              style={styles.categoryItem}
+              className="rounded-xl mb-2"
               onPress={() => router.push(category.route)}
             >
               <Image
                 source={{ uri: category.imageSrc }}
-                style={styles.categoryImage}
+                className="w-24 h-24 rounded-full mb-1 object-cover"
               />
-              <Text style={styles.categoryText}>{category.name}</Text>
+              <Text className="text-md font-bold">{category.name}</Text>
             </Pressable>
           ))}
         </View>
       </View>
 
+      <View className="h-2 my-3"></View>
+
       {/* Cards */}
-      <View style={styles.cards}>
+      <View className="gap-2 p-3">
         <View>
-          <Text style={{ fontSize: 23, fontWeight: "bold" }}>
-            Mais Vendidos
-          </Text>
+          <Text className="text-2xl font-bold">Mais Vendidos</Text>
         </View>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-          <View style={styles.cardContainer}>
+          <View className="flex-row gap-3">
             {cards.map((card) => (
               <Pressable
                 key={card.id}
-                style={styles.cardItem}
+                className="rounded-xl"
                 onPress={() => router.push(`./foods/${card.id}`)}
               >
                 <Card
@@ -149,52 +142,3 @@ export default function HomeScreen() {
     </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flexGrow: 1,
-    backgroundColor: "#f5f5f5",
-    padding: 5,
-  },
-
-  // cat
-  categoryContainer: {
-    padding: 10,
-  },
-
-  categoryImage: {
-    width: 100,
-    height: 100,
-    resizeMode: "cover",
-    marginBottom: 5,
-    borderRadius: 50,
-  },
-
-  categoryItems: {
-    flexDirection: "row",
-    gap: 10,
-  },
-
-  categoryItem: {
-    borderRadius: 10,
-    marginBottom: 10,
-  },
-
-  categoryText: {
-    fontSize: 14,
-    fontWeight: "bold",
-  },
-
-  //cards
-  cards: {
-    gap: 10,
-    padding: 10,
-  },
-  cardContainer: {
-    flexDirection: "row",
-    gap: 10,
-  },
-  cardItem: {
-    borderRadius: 10,
-  },
-});

@@ -123,8 +123,6 @@ const styles = StyleSheet.create({
   },
   noFavoritesText: {
     fontSize: 18,
-    textAlign: "center",
     color: "#888",
-    marginTop: 20,
   },
 });

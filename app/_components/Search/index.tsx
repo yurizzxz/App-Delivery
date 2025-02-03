@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, TextInput, StyleSheet } from 'react-native';
+import { View, TextInput } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 
 interface SearchInputProps {
@@ -9,36 +9,13 @@ interface SearchInputProps {
 
 export default function SearchInput({ placeholder, onChangeText }: SearchInputProps) {
   return (
-    <View style={styles.container}>
-      <AntDesign name="search1" size={20} color="#999" style={styles.icon} />
+    <View className="flex-row items-center bg-[#f5f5f5] rounded-lg px-2 py-2 my-2">
+      <AntDesign name="search1" size={20} color="#999" className="absolute left-6 z-10" />
       <TextInput
-        style={styles.input}
+        className="flex-1 h-12 rounded-lg pl-12 bg-[#ECECEC]"
         placeholder={placeholder || 'Pesquisar...'}
         onChangeText={onChangeText}
       />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    borderRadius: 8,
-    paddingHorizontal: 10,
-    marginVertical: 10,
-    backgroundColor: '#f5f5f5',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  input: {
-    flex: 1,
-    height: 50,
-    borderRadius: 8,
-    paddingHorizontal: 50,
-    backgroundColor: '#ECECEC',
-  },
-  icon: {
-    position: 'absolute',
-    left: 25,
-    zIndex: 1,
-  },
-});
