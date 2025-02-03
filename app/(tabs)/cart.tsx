@@ -21,6 +21,7 @@ import {
   arrayUnion,
 } from "firebase/firestore";
 import { useRouter } from "expo-router";
+import Container from "../_components/Container";
 
 const statusBarHeight: number = Constants.statusBarHeight;
 
@@ -155,11 +156,15 @@ export default function CartScreen() {
   };
 
   const renderItem = ({ item }: { item: CartItem }) => (
-    <View className="flex-row items-center mb-2 p-3 bg-white rounded-lg" >
-      <Image source={{ uri: item.imageSrc }} className="w-28 h-28 rounded-xl mr-4" />
+    <View className="flex-row items-center mb-2 p-3 bg-white rounded-lg">
+      <Image
+        source={{ uri: item.imageSrc }}
+        className="w-28 h-28 rounded-xl mr-4"
+      />
       <View className="flex-1">
         <Text className="text-xl text-black font-bold">
-          <Text className="text-red-600 font-bold">{item.number}</Text>{item.name}
+          <Text className="text-red-600 font-bold">{item.number}</Text>
+          {item.name}
         </Text>
         <Text className="text-sm text-gray-500 my-2">{item.description}</Text>
         <Text className="text-2xl font-bold text-black">R$ {item.price}</Text>
@@ -170,7 +175,9 @@ export default function CartScreen() {
           >
             <AntDesign name="minus" size={16} color="black" />
           </TouchableOpacity>
-          <Text className="text-lg font-bold text-black mx-4">{item.quantity}</Text>
+          <Text className="text-lg font-bold text-black mx-4">
+            {item.quantity}
+          </Text>
           <TouchableOpacity
             onPress={() => handleIncreaseQuantity(item.id)}
             className="bg-gray-200 p-2 rounded-md"
@@ -201,27 +208,29 @@ export default function CartScreen() {
   };
 
   return (
-    <View className="flex-1 bg-gray-100" style={{ marginTop: statusBarHeight }}>
-      <View className="flex-1 p-3">
-        <Header title="Carrinho" />
+    <>
+      <Container>
+        <View className="flex-1">
+          <Header title="Carrinho" />
 
-        {loading ? (
-          <Text className="text-center mt-5">Carregando...</Text>
-        ) : cartItems.length === 0 ? (
-          <View>
-            <Text className="mb-5">Seu carrinho está vazio.</Text>
-            <Button onPress={handleGoToFoods} title="Ir para cardápio" />
-          </View>
-        ) : (
-          <FlatList
-            data={cartItems}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.id}
-          />
-        )}
-      </View>
+          {loading ? (
+            <Text className="text-center mt-5">Carregando...</Text>
+          ) : cartItems.length === 0 ? (
+            <View>
+              <Text className="mb-5">Seu carrinho está vazio.</Text>
+              <Button onPress={handleGoToFoods} title="Ir para cardápio" />
+            </View>
+          ) : (
+            <FlatList
+              data={cartItems}
+              renderItem={renderItem}
+              keyExtractor={(item) => item.id}
+            />
+          )}
+        </View>
+      </Container>
 
-      <View className="mt-5 p-5 rounded-lg bg-white border-t border-gray-300">
+      <View className="mt-5 p-4 rounded-lg bg-white border-t border-gray-300">
         {cartItems.length > 0 && (
           <>
             <Text className="text-2xl font-bold text-black mb-4">
@@ -231,6 +240,6 @@ export default function CartScreen() {
           </>
         )}
       </View>
-    </View>
+    </>
   );
 }

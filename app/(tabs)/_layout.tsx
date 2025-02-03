@@ -12,8 +12,10 @@ export default function TabLayout() {
           fontSize: 12,
         },
         tabBarStyle: {
-          height: 50,
-          paddingTop: 7,
+          height: 65,
+          borderTopLeftRadius: 45,
+          borderTopRightRadius: 45,
+          paddingHorizontal: 5
         },
         tabBarActiveTintColor: '#ff0000',
       }}

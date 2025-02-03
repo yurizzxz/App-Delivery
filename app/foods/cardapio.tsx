@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { View, ScrollView, StyleSheet, ActivityIndicator } from "react-native";
+import { View, ScrollView, ActivityIndicator } from "react-native";
 import Card from "@/app/_components/Card";
 import Header from "@/app/_components/Header";
 import Constants from "expo-constants";
 import { useRouter } from "expo-router";
 import { AntDesign } from "@expo/vector-icons";
 import { fetchCards } from "../services/firebaseConfig";
-
-const statusBarHeight: number = Constants.statusBarHeight;
+import Container from "../_components/Container";
 
 interface CardType {
   id: string;
@@ -32,16 +31,15 @@ export default function CardapioScreen() {
     getCards();
   }, []);
   
-
   return (
-    <ScrollView style={[styles.container, { marginTop: statusBarHeight }]}>
-      <View style={styles.header}>
+    <Container>
+      <View className="flex-row items-center justify-start mb-4">
         <AntDesign
           name="arrowleft"
           onPress={() => router.back()}
           size={24}
           color="#000"
-          style={styles.arrowIcon}
+          className="mr-5 mt-1"
         />
         <Header title="Cardápio" />
       </View>
@@ -49,7 +47,7 @@ export default function CardapioScreen() {
       {loading ? (
         <ActivityIndicator size="large" color="#000" />
       ) : (
-        <View style={styles.cardContainer}>
+        <View className="flex-row flex-wrap justify-between gap-4">
           {cards.map((card) => (
             <Card
               key={card.id}
@@ -61,29 +59,6 @@ export default function CardapioScreen() {
           ))}
         </View>
       )}
-    </ScrollView>
+    </Container>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#f5f5f5",
-    padding: 10,
-  },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "flex-start",
-    marginBottom: 10,
-  },
-  arrowIcon: {
-    marginRight: 20,
-    marginTop: 5,
-  },
-  cardContainer: {
-    gap: 15,
-    flexDirection: "row",
-    flexWrap: "wrap",
-  },
-});

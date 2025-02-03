@@ -8,6 +8,7 @@ import { useState, useEffect } from "react";
 import { fetchCards } from "../services/firebaseConfig";
 import { getAuth } from "firebase/auth";
 import { getFirestore, doc, onSnapshot } from "firebase/firestore";
+import Container from "../_components/Container";
 
 const statusBarHeight: number = Constants.statusBarHeight;
 
@@ -79,12 +80,7 @@ export default function HomeScreen() {
   }, []);
 
   return (
-    <ScrollView
-      contentContainerStyle={[
-       ,
-        { marginTop: statusBarHeight, paddingTop: 20, paddingBottom: 40, paddingVertical: 10 },
-      ]}
-    >
+    <Container>
       <Greeting
         greeting="Bem vindo,"
         title={userName || "usuário"}
@@ -95,7 +91,7 @@ export default function HomeScreen() {
       <SearchInput placeholder="O que você procura?" onChangeText={() => {}} />
 
       {/* Categorias */}
-      <View className="p-3">
+      <View >
         <View className="flex-row gap-2">
           {categories.map((category, index) => (
             <Pressable
@@ -116,12 +112,12 @@ export default function HomeScreen() {
       <View className="h-2 my-3"></View>
 
       {/* Cards */}
-      <View className="gap-2 p-3">
+      <View className="gap-2">
         <View>
           <Text className="text-2xl font-bold">Mais Vendidos</Text>
         </View>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-          <View className="flex-row gap-3">
+          <View className="flex-row gap-2.5">
             {cards.map((card) => (
               <Pressable
                 key={card.id}
@@ -139,6 +135,6 @@ export default function HomeScreen() {
           </View>
         </ScrollView>
       </View>
-    </ScrollView>
+    </Container>
   );
 }

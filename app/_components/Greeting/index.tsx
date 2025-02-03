@@ -11,7 +11,7 @@ interface HeaderProps {
 
 export default function Greeting({ title, onProfilePress, profileImageUri, greeting }: HeaderProps) {
   return (
-    <View className="flex-row justify-between items-center p-2.5">
+    <View className="flex-row justify-between items-center pt-4">
       <View className="flex-col justify-center">
         <Text className="text-2xl text-black font-bold">{greeting}</Text>
         <Text className="text-4xl font-bold text-red-600 leading-9'">{title}</Text>

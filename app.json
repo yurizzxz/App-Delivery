@@ -36,6 +36,10 @@
         }
       ]
     ],
+    "splash": {
+      "image": "./assets/images/screensplash.png",
+      "backgroundColor": "#ff0000"
+    },
     "experiments": {
       "typedRoutes": true
     }

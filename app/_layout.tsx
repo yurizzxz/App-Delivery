@@ -10,7 +10,6 @@ export default function RootLayout() {
       <StatusBar
         backgroundColor="transparent"
         translucent
-        barStyle="dark-content"
       />
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="(tabs)" />

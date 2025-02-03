@@ -61,12 +61,12 @@ export default function Card({
 
   return (
     <View
-      className="bg-white rounded-2xl overflow-hidden mb-5 w-[175] h-[270]"
+      className="bg-white rounded-2xl overflow-hidden w-[172] h-[215]"
     >
-      <Image source={{ uri: imageSrc }} className="w-full h-2/3 object-cover" />
+      <Image source={{ uri: imageSrc }} style={{ resizeMode: "contain", width: "100%", height: 150 }} />
       <View className="px-3 pb-5 flex-1 justify-between">
-        <Text className="text-lg font-bold">{name}</Text>
-        <Text className="text-sm text-gray-500 mt-[-5px] pr-5">
+        <Text className="text-xl font-bold">{name}</Text>
+        <Text className="text-sm text-gray-500  pr-5">
           {description}
         </Text>
         <View className="items-start">
@@ -74,15 +74,15 @@ export default function Card({
         </View>
       </View>
       <TouchableOpacity
-        className="absolute bottom-0 right-0 bg-red-600 p-3"
+        className="absolute bottom-0 items-center justify-center right-0 bg-[#ff0000] p-2"
         onPress={handleAddToCart}
         disabled={isAdding}
       >
         <AntDesign
           name="shoppingcart"
-          size={24}
+          size={22}
           color="white"
-          className="right-0.5"
+          className="righ"
         />
       </TouchableOpacity>
     </View>

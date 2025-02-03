@@ -6,6 +6,8 @@ import Constants from "expo-constants";
 import { useRouter } from "expo-router";
 import { AntDesign } from "@expo/vector-icons";
 import { fetchCards } from "../services/firebaseConfig";
+import Container from "../_components/Container";
+
 
 const statusBarHeight: number = Constants.statusBarHeight;
 
@@ -33,7 +35,7 @@ export default function BebidasScreen() {
   }, []);
 
   return (
-    <ScrollView className="flex-1 bg-gray-100 p-2.5" style={{ marginTop: statusBarHeight }}>
+    <Container>
       <View className="flex-row items-center justify-start mb-4">
         <AntDesign
           name="arrowleft"
@@ -48,7 +50,7 @@ export default function BebidasScreen() {
       {loading ? (
         <ActivityIndicator size="large" color="#000" />
       ) : (
-        <View className="gap-4 flex-row flex-wrap">
+        <View className="justify-between flex-row flex-wrap gap-4">
           {cards.map((card) => (
             <Card
               key={card.id}
@@ -60,6 +62,6 @@ export default function BebidasScreen() {
           ))}
         </View>
       )}
-    </ScrollView>
+    </Container>
   );
 }

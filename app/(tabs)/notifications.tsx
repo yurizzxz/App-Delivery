@@ -1,9 +1,8 @@
 import React from "react";
-import { View, Text, StyleSheet, FlatList } from "react-native";
+import { View, Text, FlatList } from "react-native";
 import Header from "../_components/Header";
-import Constants from "expo-constants";
+import Container from "../_components/Container";
 
-const statusBarHeight: number = Constants.statusBarHeight;
 
 const notifications = [
   {
@@ -21,53 +20,24 @@ const notifications = [
     title: "Seu pedido foi enviado",
     message: "Seu pedido está a caminho. Chegando em breve!",
   },
-
 ];
 
 export default function NotificationsScreen() {
   const renderItem = ({ item }: { item: typeof notifications[0] }) => (
-    <View style={styles.notification}>
-      <Text style={styles.notificationTitle}>{item.title}</Text>
-      <Text style={styles.notificationMessage}>{item.message}</Text>
+    <View className="bg-white p-4 mb-2 rounded-lg shadow">
+      <Text className="text-xl font-bold text-gray-900">{item.title}</Text>
+      <Text className="text-base text-gray-600 mt-2">{item.message}</Text>
     </View>
   );
 
   return (
-    <View style={[styles.container, { flex: 1, marginTop: statusBarHeight }]}>
+    <Container>
       <Header title="Notificações" />
       <FlatList
         data={notifications}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
-        contentContainerStyle={styles.flatListContainer}
       />
-    </View>
+    </Container>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 15,
-    backgroundColor: "#f5f5f5",
-  },
-  flatListContainer: {
-    paddingBottom: 15,
-  },
-  notification: {
-    backgroundColor: "#fff",
-    padding: 15,
-    marginBottom: 15,
-    borderRadius: 10,
-  },
-  notificationTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#333",
-  },
-  notificationMessage: {
-    fontSize: 16,
-    color: "#777",
-    marginVertical: 5,
-  },
-});

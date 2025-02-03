@@ -8,6 +8,7 @@ import { AntDesign } from "@expo/vector-icons";
 
 import { getAuth, signOut } from "firebase/auth";
 import { getFirestore, doc, getDoc } from "firebase/firestore";
+import Container from "../_components/Container";
 
 const statusBarHeight: number = Constants.statusBarHeight;
 
@@ -47,7 +48,7 @@ export default function Profile() {
   const router = useRouter();
 
   return (
-    <View className="flex-1 bg-gray-100 p-3 mt-[${statusBarHeight}]" style={{ marginTop: statusBarHeight }} >
+    <Container >
       <Header title="Perfil" />
       <View className="flex flex-row items-center mb-5 gap-7">
         <View style={styles.avatar} />
@@ -61,12 +62,12 @@ export default function Profile() {
         </View>
       </View>
 
-      <View className="h-[1] my-5 " />
+      <View className="h-[1] my-2.5 " />
 
-      <View className="flex flex-col">
+      <View className="flex flex-col gap-1 bg-[#ECECEC] border border-[#dddddd] rounded-xl">
         <TouchableOpacity
           onPress={() => router.push("../profile/pedidos")}
-          className="px-3 py-7 border-b border-gray-300 rounded-lg"
+          className="px-5 py-6 rounded-xl"
         >
           <View className="flex flex-row items-center gap-3">
             <AntDesign name="clockcircle" size={20} color="#000" />
@@ -75,8 +76,8 @@ export default function Profile() {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => router.push("../profile/pizzasfav")}
-          className="px-3 py-7  border-b border-gray-300 rounded-lg"
+          onPress={() => router.push("../profile/pedidos")}
+          className="px-5 py-6 rounded-xl"
         >
           <View className="flex flex-row items-center gap-3">
             <AntDesign name="hearto" size={20} color="#000" />
@@ -85,8 +86,8 @@ export default function Profile() {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => router.push("../profile/lanchesfav")}
-          className="px-3 py-6  border-b border-gray-300 rounded-lg"
+          onPress={() => router.push("../profile/pedidos")}
+          className="px-5 py-6 rounded-xl"
         >
           <View className="flex flex-row items-center gap-3">
             <AntDesign name="heart" size={20} color="#000" />
@@ -95,8 +96,8 @@ export default function Profile() {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => router.push("https://api.whatsapp.com/")}
-          className="px-3 py-7  border-b border-gray-300 rounded-lg"
+          onPress={() => router.push("../profile/pedidos")}
+          className="px-5 py-6 rounded-xl"
         >
           <View className="flex flex-row items-center gap-3">
             <AntDesign name="message1" size={20} color="#000" />
@@ -106,7 +107,7 @@ export default function Profile() {
 
         <TouchableOpacity
           onPress={handleLogout}
-          className="px-3 py-7  border-b border-red-500 rounded-lg"
+          className="px-5 py-6  rounded-xl"
         >
           <View className="flex flex-row items-center gap-3">
             <AntDesign name="logout" size={20} color="#ff0000" />
@@ -114,7 +115,7 @@ export default function Profile() {
           </View>
         </TouchableOpacity>
       </View>
-    </View>
+    </Container>
   );
 }
 
