@@ -18,7 +18,7 @@ const lancheImage = require("../_assets/hamburguer.jpg");
 
 type Category = {
   name: string;
-  imageSrc: any;  // Alterado para 'any', já que você está usando require para carregar as imagens locais
+  imageSrc: any;
   route: string;
 };
 
@@ -46,13 +46,14 @@ type CardType = {
   name: string;
   description: string;
   price: string;
+  status: string;
 };
 
 export default function HomeScreen() {
   const [cards, setCards] = useState<CardType[]>([]);
   const [userName, setUserName] = useState<string | null>(null);
   const router = useRouter();
-
+  
   useEffect(() => {
     const loadCards = async () => {
       const fetchedCards = await fetchCards();
@@ -85,14 +86,39 @@ export default function HomeScreen() {
 
   return (
     <Container>
-      <Greeting
-        greeting="Bem vindo,"
-        title={userName || "usuário"}
-      />
+      <Greeting greeting="Bem vindo," title={userName || "usuário"} />
 
       <SearchInput placeholder="O que você procura?" onChangeText={() => {}} />
 
-      <View className="gap-2 mt-2">
+      <View className="gap-3 mt-3">
+        <View>
+          <Text className="text-2xl font-bold">Mais Vendidos</Text>
+        </View>
+        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+          <View className="flex-row gap-2.5">
+            {cards
+              .filter((card) => card.status.toLowerCase() === "maisvendido")
+              .map((card) => (
+                <Pressable
+                  key={card.id}
+                  className="rounded-xl"
+                  onPress={() => router.push(`./foods/${card.id}`)}
+                >
+                  <Card
+                    imageSrc={card.imageSrc}
+                    name={card.name}
+                    description={card.description}
+                    price={card.price}
+                  />
+                </Pressable>
+              ))}
+          </View>
+        </ScrollView>
+      </View>
+
+      <View className="h-2 my-3"></View>
+
+      <View className="gap-3 mt-2">
         <View>
           <Text className="text-2xl font-bold">Cardápio</Text>
         </View>
@@ -104,10 +130,12 @@ export default function HomeScreen() {
               onPress={() => router.push(category.route)}
             >
               <Image
-                source={category.imageSrc} 
+                source={category.imageSrc}
                 className="w-24 h-24 rounded-full mb-1 object-cover"
               />
-              <Text className="text-md font-bold">{category.name}</Text>
+              <Text className="text-md text-center font-bold">
+                {category.name}
+              </Text>
             </Pressable>
           ))}
         </View>
@@ -115,27 +143,28 @@ export default function HomeScreen() {
 
       <View className="h-2 my-3"></View>
 
-      {/* Cards */}
-      <View className="gap-2">
+      <View className="gap-3 mt-3">
         <View>
-          <Text className="text-2xl font-bold">Mais Vendidos</Text>
+          <Text className="text-2xl font-bold">Novos Lanches</Text>
         </View>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           <View className="flex-row gap-2.5">
-            {cards.map((card) => (
-              <Pressable
-                key={card.id}
-                className="rounded-xl"
-                onPress={() => router.push(`./foods/${card.id}`)}
-              >
-                <Card
-                  imageSrc={card.imageSrc}
-                  name={card.name}
-                  description={card.description}
-                  price={card.price}
-                />
-              </Pressable>
-            ))}
+            {cards
+              .filter((card) => card.status.toLowerCase() !== "mais vendidos")
+              .map((card) => (
+                <Pressable
+                  key={card.id}
+                  className="rounded-xl"
+                  onPress={() => router.push(`./foods/${card.id}`)}
+                >
+                  <Card
+                    imageSrc={card.imageSrc}
+                    name={card.name}
+                    description={card.description}
+                    price={card.price}
+                  />
+                </Pressable>
+              ))}
           </View>
         </ScrollView>
       </View>
