@@ -61,7 +61,7 @@ export default function Card({
 
   return (
     <View
-      className="bg-white rounded-2xl overflow-hidden w-[172] h-[215]"
+      className="bg-white rounded-2xl overflow-hidden w-[172] h-[218]"
     >
       <Image source={{ uri: imageSrc }} style={{ resizeMode: "contain", width: "100%", height: 150 }} />
       <View className="px-3 pb-5 flex-1 justify-between">
@@ -69,7 +69,7 @@ export default function Card({
         <Text className="text-sm text-gray-500  pr-5">
           {description}
         </Text>
-        <View className="items-start">
+        <View className="items-start py-1">
           <Text className="text-2xl text-black font-bold">R${price}</Text>
         </View>
       </View>

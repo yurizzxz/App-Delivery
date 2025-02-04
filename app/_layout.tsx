@@ -17,8 +17,6 @@ export default function RootLayout() {
         <Stack.Screen name="cadastro" />
         <Stack.Screen name="index" />
         <Stack.Screen name="login" />
-        <Stack.Screen name="_sitemap" />
-        <Stack.Screen name="+not-found" />
 
         <Stack.Screen name="_components/Button/index" />
         <Stack.Screen name="_components/Card/index" />
