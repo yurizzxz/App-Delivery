@@ -201,6 +201,7 @@ export default function FoodDetailScreen() {
             />
           </TouchableOpacity>
         </View>
+        <Text className="text-lg text-gray-600 mt-2 mb-4">Ingredientes</Text>
         <Text className="text-lg text-gray-600 mb-5">{item.description}</Text>
       </View>
 

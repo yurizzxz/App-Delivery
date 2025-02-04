@@ -150,7 +150,7 @@ export default function HomeScreen() {
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           <View className="flex-row gap-2.5">
             {cards
-              .filter((card) => card.status.toLowerCase() !== "mais vendidos")
+              .filter((card) => card.status.toLowerCase() === "destaque")
               .map((card) => (
                 <Pressable
                   key={card.id}

@@ -61,13 +61,13 @@ export default function Card({
 
   return (
     <View
-      className="bg-white rounded-2xl overflow-hidden w-[172] h-[218]"
+      className="bg-white rounded-2xl overflow-hidden w-[172] h-[245]"
     >
-      <Image source={{ uri: imageSrc }} style={{ resizeMode: "contain", width: "100%", height: 150 }} />
-      <View className="px-3 pb-5 flex-1 justify-between">
+      <Image source={{ uri: imageSrc }} style={{ resizeMode: "cover", width: "100%", height: 150 }} />
+      <View className="px-3 pb-5 pt-3 flex-1 justify-between">
         <Text className="text-xl font-bold">{name}</Text>
         <Text className="text-sm text-gray-500  pr-5">
-          {description}
+          {description.slice(0, 40)}...
         </Text>
         <View className="items-start py-1">
           <Text className="text-2xl text-black font-bold">R${price}</Text>
