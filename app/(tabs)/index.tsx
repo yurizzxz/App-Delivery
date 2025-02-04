@@ -118,7 +118,7 @@ export default function HomeScreen() {
 
       <View className="h-2 my-3"></View>
 
-      <View className="gap-3 mt-2">
+      <View className="gap-3 mt-2 ">
         <View>
           <Text className="text-2xl font-bold">Cardápio</Text>
         </View>
@@ -167,6 +167,8 @@ export default function HomeScreen() {
               ))}
           </View>
         </ScrollView>
+
+        <View className="h-2 my-3"></View>
       </View>
     </Container>
   );

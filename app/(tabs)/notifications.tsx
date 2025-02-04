@@ -6,16 +6,6 @@ import Container from "../_components/Container";
 
 const notifications = [
   {
-    id: "1",
-    title: "Promoção de Lanches!",
-    message: "Compre um lanche e ganhe 50% de desconto no segundo.",
-  },
-  {
-    id: "2",
-    title: "Novo produto disponível",
-    message: "Acabamos de adicionar novos itens ao nosso menu. Confira!",
-  },
-  {
     id: "3",
     title: "Seu pedido foi enviado",
     message: "Seu pedido está a caminho. Chegando em breve!",
