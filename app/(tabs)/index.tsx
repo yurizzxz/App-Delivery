@@ -12,26 +12,30 @@ import Container from "../_components/Container";
 
 const statusBarHeight: number = Constants.statusBarHeight;
 
+const pizzaImage = require("../_assets/pizza.jpeg");
+const bebidaImage = require("../_assets/refrigerante.jpg");
+const lancheImage = require("../_assets/hamburguer.jpg");
+
 type Category = {
   name: string;
-  imageSrc: string;
+  imageSrc: any;  // Alterado para 'any', já que você está usando require para carregar as imagens locais
   route: string;
 };
 
 const categories: Category[] = [
   {
     name: "Lanches",
-    imageSrc: "https://via.placeholder.com/100x100",
+    imageSrc: lancheImage,
     route: "../foods/lanches",
   },
   {
     name: "Pizzas",
-    imageSrc: "https://via.placeholder.com/100x100",
+    imageSrc: pizzaImage,
     route: "../foods/pizzas",
   },
   {
     name: "Bebidas",
-    imageSrc: "https://via.placeholder.com/100x100",
+    imageSrc: bebidaImage,
     route: "../foods/bebidas",
   },
 ];
@@ -84,14 +88,14 @@ export default function HomeScreen() {
       <Greeting
         greeting="Bem vindo,"
         title={userName || "usuário"}
-        onProfilePress={() => {}}
-        profileImageUri={null}
       />
 
       <SearchInput placeholder="O que você procura?" onChangeText={() => {}} />
 
-      {/* Categorias */}
-      <View >
+      <View className="gap-2 mt-2">
+        <View>
+          <Text className="text-2xl font-bold">Cardápio</Text>
+        </View>
         <View className="flex-row gap-2">
           {categories.map((category, index) => (
             <Pressable
@@ -100,7 +104,7 @@ export default function HomeScreen() {
               onPress={() => router.push(category.route)}
             >
               <Image
-                source={{ uri: category.imageSrc }}
+                source={category.imageSrc} 
                 className="w-24 h-24 rounded-full mb-1 object-cover"
               />
               <Text className="text-md font-bold">{category.name}</Text>
