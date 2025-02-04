@@ -13,6 +13,7 @@ import Container from "../_components/Container";
 const statusBarHeight: number = Constants.statusBarHeight;
 
 export default function Profile() {
+  const defaultProfileImageUri = "https://www.w3schools.com/w3images/avatar2.png";
   const [userName, setUserName] = useState<string | null>(null);
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
@@ -51,7 +52,9 @@ export default function Profile() {
     <Container >
       <Header title="Perfil" />
       <View className="flex flex-row items-center mb-5 gap-7">
-        <View style={styles.avatar} />
+        <View >
+          <Image source={{ uri: defaultProfileImageUri }} className="w-32 h-32 rounded-full"></Image>
+        </View>
         <View>
           <Text className="text-2xl font-bold text-black">{userName}</Text>
           <Text className="text-lg text-gray-600 mb-2">{userEmail}</Text>
@@ -124,7 +127,6 @@ const styles = StyleSheet.create({
     width: 120,
     height: 120,
     borderRadius: 60,
-    backgroundColor: "#ccc",
     marginBottom: 0,
   },
 });

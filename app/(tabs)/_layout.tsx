@@ -23,7 +23,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: "",
+          title: "Home",
           tabBarIcon: ({ color }) => (
             <AntDesign name="home" size={25} color={color} />
           ),
@@ -34,7 +34,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="coupons"
         options={{
-          title: "",
+          title: "Cupons",
           tabBarIcon: ({ color }) => (
             <AntDesign name="tag" size={25} color={color} />
           ),
@@ -45,7 +45,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="cart"
         options={{
-          title: "",
+          title: "Carrinho",
           tabBarIcon: ({ color }) => (
             <AntDesign name="shoppingcart" size={30} color={color} />
           ),
@@ -55,7 +55,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="notifications"
         options={{
-          title: "",
+          title: "Notificações",
           tabBarIcon: ({ color }) => (
             <MaterialIcons name="notifications" size={25} color={color} />
           ),
@@ -65,7 +65,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="profile"
         options={{
-          title: "",
+          title: "Perfil",
           tabBarIcon: ({ color }) => (
             <AntDesign name="user" size={25} color={color} />
           ),
