@@ -62,7 +62,7 @@ export default function Profile() {
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={() => router.push("../profile/pedidos")}
+            onPress={() => router.push("../profile/pizzasfav")}
             className="px-5 py-6 rounded-xl"
           >
             <View className="flex flex-row items-center gap-3">
@@ -72,7 +72,7 @@ export default function Profile() {
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={() => router.push("../profile/pedidos")}
+            onPress={() => router.push("../profile/lanchesfav")}
             className="px-5 py-6 rounded-xl"
           >
             <View className="flex flex-row items-center gap-3">

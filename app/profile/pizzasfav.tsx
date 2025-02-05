@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   cardContainer: {
-    gap: 15,
+    gap: 10,
     flexDirection: "row",
     flexWrap: "wrap",
   },
