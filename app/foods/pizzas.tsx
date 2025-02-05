@@ -49,7 +49,7 @@ export default function PizzasScreen() {
       {loading ? (
         <ActivityIndicator size="large" color="#000" />
       ) : (
-        <View className="justify-between flex-row flex-wrap">
+        <View className="justify-between flex-row flex-wrap gap-3">
           {cards.map((card) => (
             <Card
               key={card.id}

@@ -39,7 +39,7 @@ interface Card {
   description: string;
   price: string;
   category: string;
-  status: string;
+  status: ;
 }
 
 export const fetchCards = async (): Promise<Card[]> => {

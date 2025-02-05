@@ -53,6 +53,7 @@ export default function CadastroScreen() {
     <View style={styles.container}>
       <View style={{ alignItems: "center" }}>
         <Image
+        
           source={require("@/assets/images/andree.png")}
           style={styles.reactLogo}
         />

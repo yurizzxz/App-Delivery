@@ -93,6 +93,7 @@ export default function HomeScreen() {
       <View className="gap-3 mt-3">
         <View>
           <Text className="text-2xl font-bold">Mais Vendidos</Text>
+          <Text className="text-sm text-gray-500">Veja os lanches que mais saíram recentemente!</Text>
         </View>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           <View className="flex-row gap-2.5">
@@ -121,6 +122,7 @@ export default function HomeScreen() {
       <View className="gap-3 mt-2 ">
         <View>
           <Text className="text-2xl font-bold">Cardápio</Text>
+          <Text className="text-sm text-gray-500">Selecione uma de nossas opções de cardápio</Text>
         </View>
         <View className="flex-row gap-2">
           {categories.map((category, index) => (
@@ -146,6 +148,7 @@ export default function HomeScreen() {
       <View className="gap-3 mt-3">
         <View>
           <Text className="text-2xl font-bold">Novos Lanches</Text>
+          <Text className="text-sm text-gray-500">Veja os lanches recentemente adicionados da casa!</Text>
         </View>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           <View className="flex-row gap-2.5">

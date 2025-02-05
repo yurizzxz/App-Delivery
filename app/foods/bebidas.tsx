@@ -50,7 +50,7 @@ export default function BebidasScreen() {
       {loading ? (
         <ActivityIndicator size="large" color="#000" />
       ) : (
-        <View className="justify-between flex-row flex-wrap gap-4">
+        <View className="justify-between flex-row flex-wrap gap-3">
           {cards.map((card) => (
             <Card
               key={card.id}

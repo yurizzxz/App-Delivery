@@ -61,7 +61,7 @@ export default function Card({
 
   return (
     <View
-      className="bg-white rounded-2xl overflow-hidden w-[172] h-[245]"
+      className="bg-white rounded-2xl overflow-hidden w-[175] h-[245]"
     >
       <Image source={{ uri: imageSrc }} style={{ resizeMode: "cover", width: "100%", height: 150 }} />
       <View className="px-3 pb-5 pt-3 flex-1 justify-between">
