@@ -2,6 +2,7 @@
 
 # dependencies
 node_modules/
+React Projects/
 
 # Expo
 .expo/
@@ -32,7 +33,12 @@ yarn-error.*
 # local env files
 .env*.local
 
+.env 
+
+.npmrc
+
 # typescript
 *.tsbuildinfo
 
 app-example
+app.json

@@ -1,7 +1,7 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
-import { View, Text } from 'react-native';
-import { IconSymbol } from '@/components/ui/IconSymbol';
+import { Tabs } from "expo-router";
+import React from "react";
+import { Text } from "react-native";
+import { AntDesign, MaterialIcons } from "@expo/vector-icons";
 
 export default function TabLayout() {
   return (
@@ -12,31 +12,62 @@ export default function TabLayout() {
           fontSize: 12,
         },
         tabBarStyle: {
-          height: 60,
-          paddingTop: 10,
+          height: 65,
+          borderTopLeftRadius: 45,
+          borderTopRightRadius: 45,
+          paddingHorizontal: 5
         },
-      }}>
+        tabBarActiveTintColor: '#ff0000',
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
-          title: '',
+          title: "Home",
           tabBarIcon: ({ color }) => (
-            <View style={{ alignItems: 'center' }}>
-              <IconSymbol size={28} name="house.fill" color={color} />
-              <Text style={{ color, fontSize: 12 }}>Home</Text>
-            </View>
+            <AntDesign name="home" size={25} color={color} />
+          ),
+
+        }}
+      />
+
+      <Tabs.Screen
+        name="coupons"
+        options={{
+          title: "Cupons",
+          tabBarIcon: ({ color }) => (
+            <AntDesign name="tag" size={25} color={color} />
+          ),
+          
+        }}
+      />
+
+      <Tabs.Screen
+        name="cart"
+        options={{
+          title: "Carrinho",
+          tabBarIcon: ({ color }) => (
+            <AntDesign name="shoppingcart" size={30} color={color} />
           ),
         }}
       />
+
       <Tabs.Screen
-        name="explore"
+        name="notifications"
         options={{
-          title: '',
+          title: "Notificações",
           tabBarIcon: ({ color }) => (
-            <View style={{ alignItems: 'center' }}>
-              <IconSymbol size={28} name="paperplane.fill" color={color} />
-              <Text style={{ color, fontSize: 12 }}>Explore</Text>
-            </View>
+            <MaterialIcons name="notifications" size={25} color={color} />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: "Perfil",
+          tabBarIcon: ({ color }) => (
+            <AntDesign name="user" size={25} color={color} />
           ),
         }}
       />
